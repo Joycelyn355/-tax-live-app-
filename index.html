@@ -19,6 +19,21 @@
       --ghana-red: #ef4444;
       --global-blue: #3b82f6;
       --standards-green: #10b981;
+      --input-bg: #1e293b;
+    }
+
+    [data-theme="light"] {
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #0f172a;
+      --subtext: #475569;
+      --accent: #0284c7;
+      --accent-gold: #d97706;
+      --border: #cbd5e1;
+      --ghana-red: #dc2626;
+      --global-blue: #2563eb;
+      --standards-green: #059669;
+      --input-bg: #f1f5f9;
     }
 
     * { box-sizing: border-box; }
@@ -27,57 +42,53 @@
       background-color: var(--bg);
       color: var(--text);
       margin: 0; padding: 0;
-      padding-bottom: 70px;
+      padding-bottom: 80px;
       -webkit-tap-highlight-color: transparent;
+      transition: background 0.3s, color 0.3s;
     }
 
-    /* Executive Header */
     header {
-      background: rgba(15, 23, 42, 0.95);
+      background: var(--card-bg);
       backdrop-filter: blur(10px);
-      padding: 1.2rem 1rem 0.8rem 1rem;
+      padding: 1rem;
       position: sticky; top: 0; z-index: 100;
       border-bottom: 1px solid var(--border);
     }
     .header-top { display: flex; justify-content: space-between; align-items: center; }
-    header h1 { margin: 0; font-size: 1.25rem; font-weight: 800; color: #fff; }
-    .notif-btn {
-      background: #334155; border: none; color: #fff;
-      padding: 0.4rem 0.8rem; border-radius: 20px; font-size: 0.75rem;
+    header h1 { margin: 0; font-size: 1.15rem; font-weight: 800; }
+    
+    .header-actions { display: flex; gap: 6px; }
+    .action-btn {
+      background: var(--border); border: none; color: var(--text);
+      padding: 0.35rem 0.6rem; border-radius: 20px; font-size: 0.7rem;
       font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 4px;
     }
     
-    /* Search Bar */
-    .search-box {
-      margin-top: 0.8rem;
-    }
+    .search-box { margin-top: 0.6rem; }
     .search-input {
-      width: 100%; background: #1e293b; border: 1px solid var(--border);
-      border-radius: 8px; color: #fff; padding: 0.6rem 0.9rem; font-size: 0.85rem;
+      width: 100%; background: var(--input-bg); border: 1px solid var(--border);
+      border-radius: 8px; color: var(--text); padding: 0.55rem 0.8rem; font-size: 0.82rem;
       outline: none;
     }
     .search-input:focus { border-color: var(--accent); }
 
-    /* Nav Tabs */
     .nav-bar {
-      display: flex; background: #0f172a; border-bottom: 1px solid var(--border);
-      overflow-x: auto; -webkit-overflow-scrolling: touch;
+      display: flex; background: var(--card-bg); border-bottom: 1px solid var(--border);
+      overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch;
     }
+    .nav-bar::-webkit-scrollbar { display: none; }
     .nav-item {
-      flex: 1; min-width: 90px; text-align: center; padding: 0.75rem 0.5rem;
-      font-size: 0.8rem; font-weight: 600; color: var(--subtext);
-      border-bottom: 2px solid transparent; cursor: pointer; white-space: nowrap;
+      padding: 0.7rem 0.75rem; font-size: 0.76rem; font-weight: 600; color: var(--subtext);
+      border-bottom: 2px solid transparent; cursor: pointer; white-space: nowrap; flex-shrink: 0;
     }
     .nav-item.active { color: var(--accent); border-bottom-color: var(--accent); }
 
-    /* Alert Banner */
     .alert-banner {
       background: rgba(245, 158, 11, 0.15); border: 1px solid var(--accent-gold);
-      color: var(--accent-gold); padding: 0.8rem; margin: 0.8rem 1rem 0 1rem;
-      border-radius: 8px; font-size: 0.8rem; display: none; line-height: 1.4;
+      color: var(--accent-gold); padding: 0.7rem; margin: 0.8rem 1rem 0 1rem;
+      border-radius: 8px; font-size: 0.78rem; display: none; line-height: 1.4;
     }
 
-    /* Container & Cards */
     .container { padding: 1rem; max-width: 650px; margin: 0 auto; }
     .card {
       background: var(--card-bg); border-radius: 12px; padding: 1.1rem;
@@ -85,75 +96,87 @@
     }
     .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem; }
     .tag {
-      font-size: 0.68rem; font-weight: 700; text-transform: uppercase;
+      font-size: 0.65rem; font-weight: 700; text-transform: uppercase;
       padding: 0.2rem 0.5rem; border-radius: 4px;
     }
     .tag-ghana { background: rgba(239, 68, 68, 0.2); color: var(--ghana-red); }
     .tag-global { background: rgba(59, 130, 246, 0.2); color: var(--global-blue); }
     .tag-standards { background: rgba(16, 185, 129, 0.2); color: var(--standards-green); }
     
-    .star-btn {
-      background: none; border: none; font-size: 1.1rem; color: var(--subtext); cursor: pointer;
-    }
+    .star-btn { background: none; border: none; font-size: 1.1rem; color: var(--subtext); cursor: pointer; }
     .star-btn.saved { color: var(--accent-gold); }
 
-    .card h3 { margin: 0 0 0.4rem 0; font-size: 0.98rem; line-height: 1.4; color: #fff; }
-    .card p { margin: 0 0 0.8rem 0; font-size: 0.85rem; color: var(--subtext); line-height: 1.45; }
-    .card-footer { display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; color: #64748b; }
+    .card h3 { margin: 0 0 0.4rem 0; font-size: 0.95rem; line-height: 1.35; }
+    .card p { margin: 0 0 0.8rem 0; font-size: 0.82rem; color: var(--subtext); line-height: 1.4; }
+    .card-footer { display: flex; justify-content: space-between; align-items: center; font-size: 0.72rem; color: var(--subtext); }
     .card-footer a { color: var(--accent); font-weight: 600; text-decoration: none; }
 
-    /* Rates Table View */
-    .rate-section { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 1rem; margin-bottom: 1rem; }
-    .rate-section h3 { margin-top: 0; color: var(--accent); font-size: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; }
-    table { width: 100%; border-collapse: collapse; font-size: 0.8rem; margin-top: 0.5rem; }
-    th, td { padding: 0.5rem; text-align: left; border-bottom: 1px solid var(--border); }
+    /* Calculator & Rate Sections */
+    .utility-box { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.1rem; margin-bottom: 1rem; }
+    .utility-box h3 { margin-top: 0; color: var(--accent); font-size: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.4rem; }
+    .form-group { margin-bottom: 0.8rem; }
+    .form-group label { display: block; font-size: 0.78rem; font-weight: 600; color: var(--subtext); margin-bottom: 0.3rem; }
+    .form-input { width: 100%; background: var(--input-bg); border: 1px solid var(--border); border-radius: 6px; padding: 0.5rem; color: var(--text); font-size: 0.85rem; }
+    .calc-btn { background: var(--accent); color: #fff; border: none; border-radius: 6px; padding: 0.6rem 1rem; font-weight: 600; width: 100%; font-size: 0.85rem; cursor: pointer; margin-top: 0.4rem; }
+    
+    .calc-results { margin-top: 1rem; background: var(--input-bg); padding: 0.8rem; border-radius: 8px; font-size: 0.8rem; }
+    .calc-row { display: flex; justify-content: space-between; margin-bottom: 0.4rem; }
+    .calc-row.total { font-weight: 700; color: var(--accent); border-top: 1px solid var(--border); padding-top: 0.4rem; margin-top: 0.4rem; }
+
+    table { width: 100%; border-collapse: collapse; font-size: 0.78rem; margin-top: 0.5rem; }
+    th, td { padding: 0.45rem; text-align: left; border-bottom: 1px solid var(--border); }
     th { color: var(--subtext); }
 
-    .loader { text-align: center; padding: 3rem 1rem; color: var(--subtext); font-size: 0.85rem; }
+    .loader { text-align: center; padding: 3rem 1rem; color: var(--subtext); font-size: 0.82rem; }
 
-    /* Bottom Quick-Action Nav */
     .bottom-bar {
-      position: fixed; bottom: 0; left: 0; right: 0; background: #0f172a;
+      position: fixed; bottom: 0; left: 0; right: 0; background: var(--card-bg);
       border-top: 1px solid var(--border); display: flex; justify-content: space-around;
-      padding: 0.6rem 0; z-index: 100;
+      padding: 0.5rem 0; z-index: 100;
     }
     .bottom-bar button {
-      background: none; border: none; color: var(--subtext); font-size: 0.72rem;
-      display: flex; flex-direction: column; align-items: center; gap: 3px; font-weight: 600;
+      background: none; border: none; color: var(--subtext); font-size: 0.7rem;
+      display: flex; flex-direction: column; align-items: center; gap: 2px; font-weight: 600;
+      cursor: pointer;
     }
     .bottom-bar button.active { color: var(--accent); }
   </style>
 </head>
-<body>
+<body data-theme="dark">
 
   <header>
     <div class="header-top">
       <h1>Tax & Standards Hub</h1>
-      <button class="notif-btn" onclick="toggleNotifications()">🔔 Enable Alerts</button>
+      <div class="header-actions">
+        <button class="action-btn" onclick="toggleTheme()" id="theme-toggle-btn">☀️ Light</button>
+        <button class="action-btn" onclick="toggleNotifications()">🔔 Alerts</button>
+      </div>
     </div>
     <div class="search-box">
-      <input type="text" class="search-input" id="search-input" placeholder="Search Ghana tax, VAT, PAYE, IFRS..." oninput="handleSearch()">
+      <input type="text" class="search-input" id="search-input" placeholder="Search news, PAYE, VAT, IFRS..." oninput="handleSearch()">
     </div>
   </header>
 
   <div class="nav-bar">
     <div class="nav-item active" onclick="switchTab('feed', this)">Live News</div>
-    <div class="nav-item" onclick="switchTab('ghana', this)">Ghana Tax</div>
-    <div class="nav-item" onclick="switchTab('rates', this)">GRA Rates Sheet</div>
+    <div class="nav-item" onclick="switchTab('calculator', this)">PAYE Calculator</div>
+    <div class="nav-item" onclick="switchTab('deadlines', this)">Filing Calendar</div>
+    <div class="nav-item" onclick="switchTab('rates', this)">GRA Rates</div>
     <div class="nav-item" onclick="switchTab('standards', this)">IFRS / IAS</div>
-    <div class="nav-item" onclick="switchTab('saved', this)">Vault (Saved)</div>
+    <div class="nav-item" onclick="switchTab('saved', this)">Vault</div>
   </div>
 
   <div class="alert-banner" id="alert-banner"></div>
 
   <div class="container" id="content-area">
-    <div class="loader">Fetching updates from GRA, Citi Business, and IFRS...</div>
+    <div class="loader">Fetching updates from GRA, business news, and IFRS...</div>
   </div>
 
   <div class="bottom-bar">
-    <button class="active" onclick="switchTab('feed', null)">📰 Feeds</button>
-    <button onclick="switchTab('rates', null)">📊 GRA Rates</button>
-    <button onclick="switchTab('saved', null)">⭐ Saved Vault</button>
+    <button class="active" onclick="switchTab('feed', document.querySelectorAll('.nav-item')[0])">📰 Feeds</button>
+    <button onclick="switchTab('calculator', document.querySelectorAll('.nav-item')[1])">🧮 Calculator</button>
+    <button onclick="switchTab('deadlines', document.querySelectorAll('.nav-item')[2])">📅 Calendar</button>
+    <button onclick="switchTab('saved', document.querySelectorAll('.nav-item')[5])">⭐ Vault</button>
   </div>
 
   <script>
@@ -166,6 +189,26 @@
 
     let allItems = [];
     let currentTab = 'feed';
+
+    // Theme Switcher Logic
+    function toggleTheme() {
+      const body = document.body;
+      const btn = document.getElementById('theme-toggle-btn');
+      if (body.getAttribute('data-theme') === 'dark') {
+        body.setAttribute('data-theme', 'light');
+        btn.innerHTML = '🌙 Dark';
+        localStorage.setItem('tax_hub_theme', 'light');
+      } else {
+        body.setAttribute('data-theme', 'dark');
+        btn.innerHTML = '☀️ Light';
+        localStorage.setItem('tax_hub_theme', 'dark');
+      }
+    }
+
+    // Load saved theme preference on start
+    const savedTheme = localStorage.getItem('tax_hub_theme') || 'dark';
+    document.body.setAttribute('data-theme', savedTheme);
+    document.getElementById('theme-toggle-btn').innerHTML = savedTheme === 'light' ? '🌙 Dark' : '☀️ Light';
 
     async function fetchFeeds() {
       try {
@@ -187,11 +230,9 @@
         const results = await Promise.all(fetchPromises);
         const fetched = results.flat();
 
-        // Save into local persistence vault
         let storedVault = JSON.parse(localStorage.getItem('tax_vault_articles') || '[]');
         const combined = [...fetched, ...storedVault];
         
-        // Remove duplicates by ID
         const uniqueMap = new Map();
         combined.forEach(item => uniqueMap.set(item.id, item));
         allItems = Array.from(uniqueMap.values()).sort((a,b) => new Date(b.pubDate) - new Date(a.pubDate));
@@ -206,7 +247,7 @@
           allItems = storedVault;
           renderCurrentTab();
         } else {
-          document.getElementById('content-area').innerHTML = `<div class="loader">Unable to fetch live updates. Please check network connection.</div>`;
+          document.getElementById('content-area').innerHTML = `<div class="loader">Unable to fetch live updates. Please check connection.</div>`;
         }
       }
     }
@@ -218,7 +259,7 @@
       if (alertItem) {
         const banner = document.getElementById('alert-banner');
         banner.style.display = 'block';
-        banner.innerHTML = `<strong>⚠️ Recent Policy Notice Detected:</strong> ${alertItem.title} (<a href="${alertItem.link}" target="_blank" style="color:var(--accent)">Read Update</a>)`;
+        banner.innerHTML = `<strong>⚠️ Recent Policy Notice:</strong> ${alertItem.title} (<a href="${alertItem.link}" target="_blank" style="color:var(--accent)">Read</a>)`;
       }
     }
 
@@ -227,7 +268,7 @@
       const savedIds = JSON.parse(localStorage.getItem('tax_bookmarks') || '[]');
 
       if (!items.length) {
-        container.innerHTML = `<div class="loader">No articles found.</div>`;
+        container.innerHTML = `<div class="loader">No articles found matching your query.</div>`;
         return;
       }
 
@@ -240,7 +281,7 @@
               <button class="star-btn ${isSaved ? 'saved' : ''}" onclick="toggleBookmark('${item.id.replace(/'/g, "\\'")}')">${isSaved ? '★' : '☆'}</button>
             </div>
             <h3>${item.title}</h3>
-            <p>${item.description.substring(0, 150)}...</p>
+            <p>${item.description.substring(0, 130)}...</p>
             <div class="card-footer">
               <span>${new Date(item.pubDate).toLocaleDateString()}</span>
               <a href="${item.link}" target="_blank" rel="noopener">Read Full Article &rarr;</a>
@@ -250,11 +291,95 @@
       }).join('');
     }
 
+    function renderCalculator() {
+      const container = document.getElementById('content-area');
+      container.innerHTML = `
+        <div class="utility-box">
+          <h3>🧮 Ghana PAYE & Net Salary Calculator (Act 1178)</h3>
+          <div class="form-group">
+            <label>Monthly Basic Salary (GH¢)</label>
+            <input type="number" id="calc-basic" class="form-input" value="5000" placeholder="e.g. 5000">
+          </div>
+          <div class="form-group">
+            <label>Cash Allowances (GH¢)</label>
+            <input type="number" id="calc-allowances" class="form-input" value="1000" placeholder="e.g. 1000">
+          </div>
+          <button class="calc-btn" onclick="calculatePAYE()">Calculate Take-Home</button>
+          
+          <div class="calc-results" id="calc-output" style="display:none;">
+            <div class="calc-row"><span>Gross Salary:</span> <strong id="res-gross">GH¢ 0.00</strong></div>
+            <div class="calc-row"><span>Employee SSNIT (5.5%):</span> <strong id="res-ssnit">GH¢ 0.00</strong></div>
+            <div class="calc-row"><span>Chargeable Income:</span> <strong id="res-chargeable">GH¢ 0.00</strong></div>
+            <div class="calc-row"><span>GRA PAYE Tax Due:</span> <strong id="res-paye" style="color:var(--ghana-red)">GH¢ 0.00</strong></div>
+            <div class="calc-row total"><span>Net Take-Home Pay:</span> <strong id="res-net">GH¢ 0.00</strong></div>
+          </div>
+        </div>
+      `;
+    }
+
+    function calculatePAYE() {
+      const basic = parseFloat(document.getElementById('calc-basic').value) || 0;
+      const allowances = parseFloat(document.getElementById('calc-allowances').value) || 0;
+      const gross = basic + allowances;
+      
+      // 5.5% Employee SSNIT on basic salary
+      const ssnit = basic * 0.055;
+      const chargeable = gross - ssnit;
+
+      // Ghana PAYE Tax Bands (Act 1178)
+      let tax = 0;
+      let remaining = chargeable;
+
+      const bands = [
+        { limit: 588, rate: 0.00 },
+        { limit: 80, rate: 0.05 },
+        { limit: 100, rate: 0.10 },
+        { limit: 2900, rate: 0.175 },
+        { limit: 16000, rate: 0.25 },
+        { limit: 30332, rate: 0.30 },
+        { limit: Infinity, rate: 0.35 }
+      ];
+
+      for (let b of bands) {
+        if (remaining <= 0) break;
+        let taxableInBand = Math.min(remaining, b.limit);
+        tax += taxableInBand * b.rate;
+        remaining -= taxableInBand;
+      }
+
+      if (tax < 0) tax = 0;
+      const net = gross - ssnit - tax;
+
+      document.getElementById('res-gross').innerText = `GH¢ ${gross.toFixed(2)}`;
+      document.getElementById('res-ssnit').innerText = `GH¢ ${ssnit.toFixed(2)}`;
+      document.getElementById('res-chargeable').innerText = `GH¢ ${chargeable.toFixed(2)}`;
+      document.getElementById('res-paye').innerText = `GH¢ ${tax.toFixed(2)}`;
+      document.getElementById('res-net').innerText = `GH¢ ${net.toFixed(2)}`;
+      document.getElementById('calc-output').style.display = 'block';
+    }
+
+    function renderDeadlinesCalendar() {
+      const container = document.getElementById('content-area');
+      container.innerHTML = `
+        <div class="utility-box">
+          <h3>📅 GRA Statutory Filing & Compliance Calendar</h3>
+          <table>
+            <tr><th>Return Type</th><th>Statutory Due Date</th></tr>
+            <tr><td>PAYE Tax Remittances</td><td>15th of the following month</td></tr>
+            <tr><td>SSNIT Contributions (Tier 1 & 2)</td><td>14th of the following month</td></tr>
+            <tr><td>VAT, NHIL, GETFund & COVID-19 Levy</td><td>Last day of the following month</td></tr>
+            <tr><td>Corporate Income Tax (CIT) Quarterly</td><td>March 31, June 30, Sept 30, Dec 31</td></tr>
+            <tr><td>Annual Tax Returns Filing (Companies)</td><td>Within 4 months after end of financial year</td></tr>
+          </table>
+        </div>
+      `;
+    }
+
     function renderRatesSheet() {
       const container = document.getElementById('content-area');
       container.innerHTML = `
-        <div class="rate-section">
-          <h3>🇬🇭 Ghana PAYE Tax Bands (Income Tax Act 1178)</h3>
+        <div class="utility-box">
+          <h3>🇬🇭 Ghana PAYE Tax Bands (Act 1178)</h3>
           <table>
             <tr><th>Monthly Chargeable Income</th><th>Rate</th></tr>
             <tr><td>First GH¢588</td><td>0% (Tax Free)</td></tr>
@@ -266,45 +391,28 @@
             <tr><td>Exceeding GH¢50,000</td><td>35%</td></tr>
           </table>
         </div>
-
-        <div class="rate-section">
-          <h3>📋 Value Added Tax (VAT) & Levies</h3>
+        <div class="utility-box">
+          <h3>📋 VAT & Statutory Levies</h3>
           <table>
-            <tr><th>Tax / Levy Component</th><th>Standard Rate</th></tr>
+            <tr><th>Component</th><th>Rate</th></tr>
             <tr><td>Value Added Tax (VAT)</td><td>15.0%</td></tr>
-            <tr><td>National Health Insurance Levy (NHIL)</td><td>2.5%</td></tr>
+            <tr><td>NHIL</td><td>2.5%</td></tr>
             <tr><td>GETFund Levy</td><td>2.5%</td></tr>
-            <tr><td>COVID-19 Health Recovery Levy</td><td>1.0%</td></tr>
-            <tr><td>SME Presumptive Tax Scheme</td><td>3.0% of Turnover</td></tr>
-          </table>
-        </div>
-
-        <div class="rate-section">
-          <h3>💼 Withholding Tax Rates (WHT)</h3>
-          <table>
-            <tr><th>Transaction Type</th><th>Rate</th></tr>
-            <tr><td>Supply of Goods</td><td>3.0%</td></tr>
-            <tr><td>Supply of Services</td><td>7.5%</td></tr>
-            <tr><td>Works / Construction</td><td>5.0%</td></tr>
-            <tr><td>Dividends / Interest Paid to Residents</td><td>8.0%</td></tr>
+            <tr><td>COVID-19 Recovery Levy</td><td>1.0%</td></tr>
           </table>
         </div>
       `;
     }
 
-    function switchTab(tab, element) {
-      currentTab = tab;
-      if (element) {
-        document.querySelectorAll('.nav-item').forEach(e => e.classList.remove('active'));
-        element.classList.add('active');
+    function renderCurrentTab() {
+      if (currentTab === 'calculator') {
+        renderCalculator();
+        return;
       }
-
-      handleSearch();
-    }
-
-    function handleSearch() {
-      const query = document.getElementById('search-input').value.toLowerCase();
-      
+      if (currentTab === 'deadlines') {
+        renderDeadlinesCalendar();
+        return;
+      }
       if (currentTab === 'rates') {
         renderRatesSheet();
         return;
@@ -315,14 +423,27 @@
       if (currentTab === 'standards') filtered = allItems.filter(i => i.category === 'standards');
       if (currentTab === 'saved') {
         const savedIds = JSON.parse(localStorage.getItem('tax_bookmarks') || '[]');
-        filtered = allItems.filter(i => savedIds.includes(item => item.id));
+        filtered = allItems.filter(i => savedIds.includes(i.id));
       }
 
+      const query = document.getElementById('search-input').value.toLowerCase();
       if (query) {
         filtered = filtered.filter(i => i.title.toLowerCase().includes(query) || i.description.toLowerCase().includes(query));
       }
-
       renderCards(filtered);
+    }
+
+    function switchTab(tab, element) {
+      currentTab = tab;
+      if (element) {
+        document.querySelectorAll('.nav-item').forEach(e => e.classList.remove('active'));
+        element.classList.add('active');
+      }
+      renderCurrentTab();
+    }
+
+    function handleSearch() {
+      renderCurrentTab();
     }
 
     function toggleBookmark(id) {
@@ -333,18 +454,18 @@
         savedIds.push(id);
       }
       localStorage.setItem('tax_bookmarks', JSON.stringify(savedIds));
-      handleSearch();
+      renderCurrentTab();
     }
 
     function toggleNotifications() {
       if (!("Notification" in window)) {
-        alert("Web notifications are not supported on this browser version.");
+        alert("Web notifications not supported on this browser.");
         return;
       }
       Notification.requestPermission().then(permission => {
         if (permission === "granted") {
-          alert("Alerts Enabled! You will receive push notifications when critical Ghana tax updates are published.");
-          new Notification("Tax Hub Alerts Active", { body: "You are subscribed to Ghana tax & IFRS updates." });
+          alert("Alerts Enabled successfully!");
+          new Notification("Tax Hub Active", { body: "Subscribed to live tax updates." });
         }
       });
     }
