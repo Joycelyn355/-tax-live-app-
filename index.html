@@ -1,887 +1,138 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark" class="h-full">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Tax, Accounting & Financial Markets Hub</title>
-
-  <!-- Mobile PWA Meta -->
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="TaxMarketsGH">
-  <meta name="theme-color" content="#0f172a">
-
-  <!-- Tailwind CSS & FontAwesome Icons -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      darkMode: ['class', '[data-theme="dark"]'],
-      theme: {
-        extend: {
-          colors: {
-            brand: {
-              50: '#f0fdf4',
-              400: '#4ade80',
-              500: '#22c55e',
-              600: '#16a34a',
-              700: '#15803d',
-              950: '#052e16'
-            }
-          }
-        }
-      }
-    }
-  </script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  
-  <style>
-    /* Clean contrast tokens */
-    [data-theme="dark"] {
-      --bg-main: #090d16;
-      --bg-card: #131c2e;
-      --bg-input: #1e293b;
-      --border-color: #2a3a52;
-      --text-main: #f8fafc;
-      --text-muted: #94a3b8;
-      --nav-bg: #0f172a;
-    }
-
-    [data-theme="light"] {
-      --bg-main: #f1f5f9;
-      --bg-card: #ffffff;
-      --bg-input: #e2e8f0;
-      --border-color: #cbd5e1;
-      --text-main: #0f172a;
-      --text-muted: #475569;
-      --nav-bg: #ffffff;
-    }
-
-    body {
-      background-color: var(--bg-main);
-      color: var(--text-main);
-      -webkit-tap-highlight-color: transparent;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    }
-
-    .card-element {
-      background-color: var(--bg-card);
-      border: 1px solid var(--border-color);
-    }
-
-    .hide-scrollbar::-webkit-scrollbar { display: none; }
-    .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-
-    @media print {
-      header, nav, .no-print, button, #alertModal { display: none !important; }
-      body { background: white !important; color: black !important; padding: 0 !important; }
-      main { max-width: 100% !important; margin: 0 !important; padding: 0 !important; }
-      .card-element { border: 1px solid #ccc !important; background: white !important; color: black !important; }
-      .text-slate-400, .text-slate-300, .text-slate-200 { color: #333 !important; }
-    }
-  </style>
-</head>
-<body class="h-full flex flex-col antialiased pb-20 md:pb-6">
-
-  <!-- Header -->
-  <header class="sticky top-0 z-40 bg-slate-900 text-white border-b border-slate-800 shadow-xl no-print">
-    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between gap-2">
-      
-      <!-- Brand & Title -->
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-400 flex items-center justify-center text-slate-950 font-black text-xl shadow-lg">
-          🇬🇭
-        </div>
-        <div>
-          <h1 class="font-extrabold text-sm md:text-base leading-tight flex items-center gap-2">
-            Tax & Markets Intelligence
-            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
-              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse mr-1"></span> LIVE
-            </span>
-          </h1>
-          <p class="text-[11px] text-slate-400">GRA • PAYE • Global Markets • IFRS • Gemini AI</p>
-        </div>
-      </div>
-
-      <!-- Controls -->
-      <div class="flex items-center gap-2">
-        <button onclick="openApiKeyModal()" class="px-2.5 py-1.5 rounded-xl bg-purple-600/30 text-purple-300 hover:bg-purple-600/50 border border-purple-500/40 text-xs font-bold flex items-center gap-1.5">
-          <i class="fa-solid fa-key"></i>
-          <span class="hidden sm:inline" id="keyBtnLabel">Gemini Key</span>
-        </button>
-
-        <button onclick="toggleTheme()" id="themeBtn" class="px-2.5 py-1.5 rounded-xl bg-slate-800 text-sky-400 hover:bg-slate-700 border border-slate-700 text-xs font-bold flex items-center gap-1.5">
-          <i id="themeIcon" class="fa-solid fa-sun text-yellow-400"></i>
-          <span class="hidden sm:inline" id="themeText">Light</span>
-        </button>
-
-        <button onclick="window.print()" class="p-2 rounded-xl bg-slate-800 text-emerald-400 hover:bg-slate-700 border border-slate-700 text-xs font-bold" title="Print / Export PDF">
-          <i class="fa-solid fa-file-pdf"></i>
-        </button>
-      </div>
-    </div>
-
-    <!-- Main Navigation Bar -->
-    <div class="max-w-6xl mx-auto px-4 flex items-center gap-2 overflow-x-auto hide-scrollbar py-2.5 border-t border-slate-800/80 text-xs font-bold">
-      <button onclick="switchTab('feed')" id="tab-feed" class="nav-tab px-3.5 py-2 rounded-xl whitespace-nowrap transition-all bg-emerald-500 text-slate-950 shadow-md">
-        <i class="fa-solid fa-newspaper mr-1.5"></i> News Matrix
-      </button>
-      <button onclick="switchTab('markets')" id="tab-markets" class="nav-tab px-3.5 py-2 rounded-xl whitespace-nowrap transition-all bg-slate-800 text-slate-300 hover:text-white">
-        <i class="fa-solid fa-chart-line mr-1.5 text-yellow-400"></i> Global Markets
-      </button>
-      <button onclick="switchTab('calculator')" id="tab-calculator" class="nav-tab px-3.5 py-2 rounded-xl whitespace-nowrap transition-all bg-slate-800 text-slate-300 hover:text-white">
-        <i class="fa-solid fa-calculator mr-1.5 text-sky-400"></i> PAYE Calc
-      </button>
-      <button onclick="switchTab('calendar')" id="tab-calendar" class="nav-tab px-3.5 py-2 rounded-xl whitespace-nowrap transition-all bg-slate-800 text-slate-300 hover:text-white">
-        <i class="fa-solid fa-calendar-check mr-1.5 text-amber-400"></i> Deadlines
-      </button>
-      <button onclick="switchTab('rates')" id="tab-rates" class="nav-tab px-3.5 py-2 rounded-xl whitespace-nowrap transition-all bg-slate-800 text-slate-300 hover:text-white">
-        <i class="fa-solid fa-table-list mr-1.5 text-emerald-400"></i> GRA Rates
-      </button>
-      <button onclick="switchTab('ai')" id="tab-ai" class="nav-tab px-3.5 py-2 rounded-xl whitespace-nowrap transition-all bg-slate-800 text-slate-300 hover:text-white">
-        <i class="fa-solid fa-robot mr-1.5 text-purple-400"></i> Gemini AI Tutor
-      </button>
-      <button onclick="switchTab('vault')" id="tab-vault" class="nav-tab px-3.5 py-2 rounded-xl whitespace-nowrap transition-all bg-slate-800 text-slate-300 hover:text-white">
-        <i class="fa-solid fa-vault mr-1.5 text-rose-400"></i> Vault (<span id="vaultBadge">0</span>)
-      </button>
-    </div>
-  </header>
-
-  <!-- Content Body -->
-  <main class="flex-1 max-w-6xl w-full mx-auto p-4 space-y-5">
-
-    <!-- TAB 1: NEWS MATRIX & FEEDS -->
-    <section id="sec-feed" class="space-y-4">
-      
-      <!-- Filter Matrix Panel -->
-      <div class="card-element p-4 rounded-2xl space-y-3 no-print">
-        <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
-          
-          <!-- Search Bar -->
-          <div class="relative flex-1">
-            <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
-            <input type="text" id="searchInput" oninput="renderArticles()" placeholder="Search news, taxation, GSE, IFRS 18, inflation..." 
-                   class="w-full pl-9 pr-4 py-2 text-xs rounded-xl border border-slate-700 bg-slate-900/60 focus:outline-none focus:border-emerald-500">
-          </div>
-
-          <!-- Region Selector -->
-          <div class="flex items-center gap-1.5 overflow-x-auto hide-scrollbar text-xs font-bold">
-            <span class="text-slate-400 text-[11px] mr-1">Region:</span>
-            <button onclick="setRegion('ghana')" id="reg-ghana" class="reg-btn px-3 py-1.5 rounded-xl border border-emerald-500 bg-emerald-500/20 text-emerald-400">🇬🇭 Ghana</button>
-            <button onclick="setRegion('usa')" id="reg-usa" class="reg-btn px-3 py-1.5 rounded-xl border border-slate-700 bg-slate-800/60 text-slate-400">🇺🇸 USA</button>
-            <button onclick="setRegion('uk')" id="reg-uk" class="reg-btn px-3 py-1.5 rounded-xl border border-slate-700 bg-slate-800/60 text-slate-400">🇬🇧 UK</button>
-            <button onclick="setRegion('global')" id="reg-global" class="reg-btn px-3 py-1.5 rounded-xl border border-slate-700 bg-slate-800/60 text-slate-400">🌐 Global</button>
-          </div>
-        </div>
-
-        <!-- Topic Tabs -->
-        <div class="flex items-center gap-2 overflow-x-auto hide-scrollbar pt-2 border-t border-slate-800/60 text-xs font-semibold">
-          <span class="text-slate-400 text-[11px] mr-1">Topic:</span>
-          <button onclick="setTopic('all')" id="top-all" class="top-btn px-3 py-1 rounded-lg bg-emerald-500 text-slate-950 font-bold">All Topics</button>
-          <button onclick="setTopic('tax')" id="top-tax" class="top-btn px-3 py-1 rounded-lg bg-slate-800 text-slate-400">Tax & Policy</button>
-          <button onclick="setTopic('business')" id="top-business" class="top-btn px-3 py-1 rounded-lg bg-slate-800 text-slate-400">Business & Economy</button>
-          <button onclick="setTopic('accounting')" id="top-accounting" class="top-btn px-3 py-1 rounded-lg bg-slate-800 text-slate-400">IFRS & Standards</button>
-          <button onclick="setTopic('markets')" id="top-markets" class="top-btn px-3 py-1 rounded-lg bg-slate-800 text-slate-400">Markets & Finance</button>
-        </div>
-      </div>
-
-      <!-- Feed Loading Indicator -->
-      <div id="loader" class="card-element p-8 rounded-2xl text-center space-y-3">
-        <i class="fa-solid fa-circle-notch fa-spin text-emerald-400 text-2xl"></i>
-        <p class="text-xs text-slate-400">Fetching live business & tax intelligence feeds...</p>
-      </div>
-
-      <!-- Article Container -->
-      <div id="articlesList" class="grid grid-cols-1 md:grid-cols-2 gap-4 hidden"></div>
-    </section>
-
-    <!-- TAB 2: GLOBAL MARKETS & BOG FX -->
-    <section id="sec-markets" class="space-y-4 hidden">
-      
-      <!-- Markets Ticker Overview -->
-      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 text-xs font-semibold">
-        <div class="card-element p-3 rounded-xl space-y-1">
-          <div class="text-[10px] text-slate-400 uppercase">Ghana Stock Ex.</div>
-          <div class="font-mono font-bold text-emerald-400">GSE-CI 4,280.15</div>
-          <div class="text-[10px] text-emerald-400"><i class="fa-solid fa-arrow-up"></i> +0.42%</div>
-        </div>
-        <div class="card-element p-3 rounded-xl space-y-1">
-          <div class="text-[10px] text-slate-400 uppercase">S&P 500</div>
-          <div class="font-mono font-bold text-emerald-400">5,864.67</div>
-          <div class="text-[10px] text-emerald-400"><i class="fa-solid fa-arrow-up"></i> +0.35%</div>
-        </div>
-        <div class="card-element p-3 rounded-xl space-y-1">
-          <div class="text-[10px] text-slate-400 uppercase">Nasdaq 100</div>
-          <div class="font-mono font-bold text-emerald-400">20,324.10</div>
-          <div class="text-[10px] text-emerald-400"><i class="fa-solid fa-arrow-up"></i> +0.58%</div>
-        </div>
-        <div class="card-element p-3 rounded-xl space-y-1">
-          <div class="text-[10px] text-slate-400 uppercase">Gold (oz)</div>
-          <div class="font-mono font-bold text-amber-400">$2,720.50</div>
-          <div class="text-[10px] text-amber-400"><i class="fa-solid fa-arrow-up"></i> +0.80%</div>
-        </div>
-        <div class="card-element p-3 rounded-xl space-y-1">
-          <div class="text-[10px] text-slate-400 uppercase">Cocoa (Ton)</div>
-          <div class="font-mono font-bold text-amber-500">$7,450.00</div>
-          <div class="text-[10px] text-emerald-400"><i class="fa-solid fa-arrow-up"></i> +1.20%</div>
-        </div>
-        <div class="card-element p-3 rounded-xl space-y-1">
-          <div class="text-[10px] text-slate-400 uppercase">BoG USD/GHS</div>
-          <div class="font-mono font-bold text-sky-400">GH₵ 15.85</div>
-          <div class="text-[10px] text-slate-400">Official Interbank</div>
-        </div>
-      </div>
-
-      <!-- TradingView Market Widgets -->
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        
-        <!-- Live Market Overview Widget -->
-        <div class="card-element p-4 rounded-2xl space-y-3">
-          <h3 class="font-bold text-sm flex items-center justify-between">
-            <span><i class="fa-solid fa-chart-line text-yellow-400 mr-2"></i> Global Equities Overview</span>
-            <span class="text-[10px] text-slate-400 font-normal">Real-Time Data</span>
-          </h3>
-          <div class="w-full h-80 rounded-xl overflow-hidden border border-slate-800">
-            <!-- TradingView Widget BEGIN -->
-            <div class="tradingview-widget-container h-full w-full">
-              <iframe class="w-full h-full border-0" src="https://s.tradingview.com/embed-widget/market-overview/?locale=en#%7B%22symbolsGroups%22%3A%5B%7B%22name%22%3A%22Indices%22%2C%22originalName%22%3A%22Indices%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22FOREXCOM%3ASPXUSD%22%2C%22d%22%3A%22S%26P%20500%22%7D%2C%7B%22s%22%3A%22FOREXCOM%3ANSXUSD%22%2C%22d%22%3A%22US%20100%22%7D%2C%7B%22s%22%3A%22INDEX%3AFTSC%22%2C%22d%22%3A%22FTSE%20100%22%7D%5D%7D%2C%7B%22name%22%3A%22Commodities%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22TVC%3AGOLD%22%2C%22d%22%3A%22Gold%22%7D%2C%7B%22s%22%3A%22TVC%3ASILVER%22%2C%22d%22%3A%22Silver%22%7D%5D%7D%5D%2C%22colorTheme%22%3A%22dark%22%2C%22width%22%3A%22100%25%22%2C%22height%22%3A%22100%25%22%7D"></iframe>
-            </div>
-            <!-- TradingView Widget END -->
-          </div>
-        </div>
-
-        <!-- IAS 21 Foreign Exchange Revaluation Utility -->
-        <div class="card-element p-4 rounded-2xl space-y-4 border-l-4 border-l-yellow-400">
-          <div>
-            <h3 class="font-bold text-sm flex items-center gap-2">
-              <i class="fa-solid fa-coins text-yellow-400"></i> IAS 21 Foreign Exchange Revaluation
-            </h3>
-            <p class="text-xs text-slate-400">Calculate unrealized foreign exchange gain/loss for financial statements & tax reconciliation under Ghana Income Tax Act 896.</p>
-          </div>
-
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
-            <div>
-              <label class="block font-semibold mb-1 text-slate-400">Foreign Amount ($/€/£)</label>
-              <input type="number" id="fxAmt" value="10000" oninput="calcIAS21()" class="w-full p-2.5 rounded-xl border border-slate-700 bg-slate-900 font-bold focus:outline-none focus:border-yellow-400">
-            </div>
-            <div>
-              <label class="block font-semibold mb-1 text-slate-400">Booking Rate (GHS)</label>
-              <input type="number" id="fxBook" value="15.20" step="0.01" oninput="calcIAS21()" class="w-full p-2.5 rounded-xl border border-slate-700 bg-slate-900 font-bold focus:outline-none focus:border-yellow-400">
-            </div>
-            <div>
-              <label class="block font-semibold mb-1 text-slate-400">Closing Spot Rate (GHS)</label>
-              <input type="number" id="fxSpot" value="15.85" step="0.01" oninput="calcIAS21()" class="w-full p-2.5 rounded-xl border border-slate-700 bg-slate-900 font-bold focus:outline-none focus:border-yellow-400">
-            </div>
-          </div>
-
-          <div class="p-3.5 rounded-xl bg-slate-900/90 border border-slate-800 space-y-2 text-xs">
-            <div class="flex justify-between"><span class="text-slate-400">Original Book Value:</span><strong id="outFxBook" class="font-mono">GH₵ 0.00</strong></div>
-            <div class="flex justify-between"><span class="text-slate-400">Revalued Closing Value:</span><strong id="outFxSpot" class="font-mono">GH₵ 0.00</strong></div>
-            <div class="flex justify-between border-t border-slate-800 pt-2 font-bold text-sm">
-              <span>IAS 21 Revaluation Difference:</span>
-              <span id="outFxDiff" class="font-mono text-emerald-400">GH₵ 0.00</span>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- TAB 3: INTERACTIVE GHANA PAYE CALCULATOR -->
-    <section id="sec-calculator" class="space-y-4 hidden">
-      <div class="card-element p-5 rounded-2xl border-l-4 border-l-sky-500 space-y-4">
-        <div>
-          <h2 class="text-base font-bold flex items-center gap-2">
-            <i class="fa-solid fa-calculator text-sky-400"></i> Ghana PAYE & Net Salary Calculator (Act 1178)
-          </h2>
-          <p class="text-xs text-slate-400">Computes Employee SSNIT (5.5%), Employer SSNIT (13%), Tier 3 Provident Fund tax relief, and progressive GRA PAYE monthly tax bands.</p>
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
-          <div>
-            <label class="block font-semibold mb-1 text-slate-400">Monthly Basic Salary (GH₵)</label>
-            <input type="number" id="calcBasic" value="6500" oninput="runPayeCalc()" class="w-full p-2.5 rounded-xl border border-slate-700 bg-slate-900 font-bold text-sm focus:outline-none focus:border-sky-500">
-          </div>
-          <div>
-            <label class="block font-semibold mb-1 text-slate-400">Cash Allowances (GH₵)</label>
-            <input type="number" id="calcAllowance" value="1200" oninput="runPayeCalc()" class="w-full p-2.5 rounded-xl border border-slate-700 bg-slate-900 font-bold text-sm focus:outline-none focus:border-sky-500">
-          </div>
-          <div>
-            <label class="block font-semibold mb-1 text-slate-400">Tier 3 Provident Fund (%)</label>
-            <input type="number" id="calcTier3" value="5" oninput="runPayeCalc()" class="w-full p-2.5 rounded-xl border border-slate-700 bg-slate-900 font-bold text-sm focus:outline-none focus:border-sky-500">
-          </div>
-        </div>
-
-        <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-2 text-xs">
-          <div class="flex justify-between"><span class="text-slate-400">Total Gross Earnings:</span><strong id="outGross" class="font-mono">GH₵ 0.00</strong></div>
-          <div class="flex justify-between"><span class="text-slate-400">Employee SSNIT (5.5%):</span><strong id="outSSNIT" class="font-mono text-amber-400">GH₵ 0.00</strong></div>
-          <div class="flex justify-between"><span class="text-slate-400">Tier 3 Relief Deducted:</span><strong id="outTier3" class="font-mono text-emerald-400">GH₵ 0.00</strong></div>
-          <div class="flex justify-between"><span class="text-slate-400">Chargeable Income:</span><strong id="outTaxable" class="font-mono">GH₵ 0.00</strong></div>
-          <div class="flex justify-between"><span class="text-slate-400">GRA Monthly PAYE Tax:</span><strong id="outPAYE" class="font-mono text-rose-400">GH₵ 0.00</strong></div>
-          <div class="flex justify-between border-t border-slate-800 pt-2"><span class="text-slate-400">Employer SSNIT (13%):</span><strong id="outEmployerSSNIT" class="font-mono text-slate-400">GH₵ 0.00</strong></div>
-          <div class="flex justify-between border-t border-slate-700 pt-2 text-sm font-black text-emerald-400">
-            <span>Net Take-Home Monthly Salary:</span>
-            <span id="outNet" class="text-base font-mono">GH₵ 0.00</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- TAB 4: STATUTORY FILING CALENDAR -->
-    <section id="sec-calendar" class="space-y-4 hidden">
-      <div class="card-element p-5 rounded-2xl border-l-4 border-l-amber-500 space-y-4">
-        <div class="flex justify-between items-start">
-          <div>
-            <h2 class="text-base font-bold flex items-center gap-2">
-              <i class="fa-solid fa-calendar-check text-amber-400"></i> Statutory Return Filing Deadlines
-            </h2>
-            <p class="text-xs text-slate-400">Automatic live countdowns to GRA & SSNIT statutory filing due dates.</p>
-          </div>
-          <button onclick="requestNotificationPermission()" class="px-3 py-1.5 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-500/30 font-bold text-xs">
-            <i class="fa-solid fa-bell mr-1"></i> Enable Alerts
-          </button>
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-1">
-            <div class="text-[10px] font-extrabold uppercase text-amber-400">Monthly Remittance</div>
-            <div class="text-xs font-bold">GRA PAYE Tax Return</div>
-            <div class="text-xl font-black font-mono text-amber-400" id="cd-paye">-- Days Left</div>
-            <p class="text-[11px] text-slate-400">Due date: 15th of every month</p>
-          </div>
-
-          <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-1">
-            <div class="text-[10px] font-extrabold uppercase text-sky-400">Social Security</div>
-            <div class="text-xs font-bold">SSNIT Tier 1 & 2 Payment</div>
-            <div class="text-xl font-black font-mono text-sky-400" id="cd-ssnit">-- Days Left</div>
-            <p class="text-[11px] text-slate-400">Due date: 14th of every month</p>
-          </div>
-
-          <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-1">
-            <div class="text-[10px] font-extrabold uppercase text-emerald-400">VAT & Statutory Levies</div>
-            <div class="text-xs font-bold">VAT / NHIL / GETFund / COVID Levy</div>
-            <div class="text-xl font-black font-mono text-emerald-400" id="cd-vat">-- Days Left</div>
-            <p class="text-[11px] text-slate-400">Due date: Last day of month</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- TAB 5: GRA RATES SHEET -->
-    <section id="sec-rates" class="space-y-4 hidden">
-      <div class="card-element p-5 rounded-2xl border-l-4 border-l-emerald-500 space-y-4">
-        <h2 class="text-base font-bold flex items-center gap-2">
-          <i class="fa-solid fa-table-list text-emerald-400"></i> Official GRA Income Tax Bands (Act 1178)
-        </h2>
-        
-        <div class="overflow-x-auto">
-          <table class="w-full text-left text-xs">
-            <thead class="bg-slate-900/90 border-b border-slate-800 text-slate-400 font-bold">
-              <tr><th class="p-2.5">Monthly Band (GHS)</th><th class="p-2.5">Tax Rate</th><th class="p-2.5">Cumulative Tax (GHS)</th></tr>
-            </thead>
-            <tbody class="divide-y divide-slate-800/60 font-medium">
-              <tr><td class="p-2.5">First GH₵ 490</td><td class="p-2.5 font-bold text-emerald-400">0%</td><td class="p-2.5">GH₵ 0.00</td></tr>
-              <tr><td class="p-2.5">Next GH₵ 110</td><td class="p-2.5 font-bold text-amber-400">5%</td><td class="p-2.5">GH₵ 5.50</td></tr>
-              <tr><td class="p-2.5">Next GH₵ 130</td><td class="p-2.5 font-bold text-amber-400">10%</td><td class="p-2.5">GH₵ 18.50</td></tr>
-              <tr><td class="p-2.5">Next GH₵ 3,166.67</td><td class="p-2.5 font-bold text-amber-400">17.5%</td><td class="p-2.5">GH₵ 572.67</td></tr>
-              <tr><td class="p-2.5">Next GH₵ 16,000.00</td><td class="p-2.5 font-bold text-amber-400">25%</td><td class="p-2.5">GH₵ 4,572.67</td></tr>
-              <tr><td class="p-2.5">Next GH₵ 30,500.00</td><td class="p-2.5 font-bold text-amber-400">30%</td><td class="p-2.5">GH₵ 13,722.67</td></tr>
-              <tr><td class="p-2.5">Exceeding GH₵ 50,396.67</td><td class="p-2.5 font-bold text-rose-400">35%</td><td class="p-2.5">35% on Excess</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </section>
-
-    <!-- TAB 6: GEMINI AI ACCOUNTING TUTOR -->
-    <section id="sec-ai" class="space-y-4 hidden">
-      <div class="card-element p-5 rounded-2xl border-l-4 border-l-purple-500 space-y-4">
-        <div class="flex justify-between items-start">
-          <div>
-            <h2 class="text-base font-bold flex items-center gap-2">
-              <i class="fa-solid fa-robot text-purple-400"></i> Gemini Accounting & Tax Technical AI Tutor
-            </h2>
-            <p class="text-xs text-slate-400">Comprehensive responses trained on Ghana Income Tax Act 896, Act 1178, and IFRS standards.</p>
-          </div>
-          <button onclick="openApiKeyModal()" class="px-3 py-1 rounded-xl bg-purple-600/20 text-purple-300 border border-purple-500/30 text-xs font-bold">
-            <i class="fa-solid fa-key mr-1"></i> Key Config
-          </button>
-        </div>
-
-        <!-- Preset Chips -->
-        <div class="flex flex-wrap gap-1.5 text-[11px] no-print">
-          <button onclick="askAI('Explain IFRS 16 Leases accounting treatment in detail with balance sheet impacts.')" class="px-2.5 py-1 rounded-lg bg-purple-500/10 border border-purple-500/30 text-purple-300 font-semibold">IFRS 16 Leases</button>
-          <button onclick="askAI('What are the Withholding Tax (WHT) rates under Ghana Income Tax Act 896 for goods, services, and dividends?')" class="px-2.5 py-1 rounded-lg bg-purple-500/10 border border-purple-500/30 text-purple-300 font-semibold">Ghana WHT Rates</button>
-          <button onclick="askAI('How are Capital Allowances calculated under Ghana Income Tax Act 896 for Class 1 to Class 5 assets?')" class="px-2.5 py-1 rounded-lg bg-purple-500/10 border border-purple-500/30 text-purple-300 font-semibold">Capital Allowances</button>
-        </div>
-
-        <!-- Chat History -->
-        <div id="aiChatBox" class="h-80 overflow-y-auto p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-3 text-xs leading-relaxed">
-          <div class="p-3.5 rounded-xl bg-purple-500/10 border border-purple-500/20 text-purple-200">
-            <strong>🤖 Gemini AI Assistant:</strong> Welcome! Enter any technical question regarding Ghana Revenue Authority (GRA) tax laws, statutory filing, or IFRS accounting standards. Connect your Gemini API Key in the top header for live AI generation.
-          </div>
-        </div>
-
-        <!-- Prompt Input -->
-        <div class="flex gap-2 no-print">
-          <input type="text" id="aiInput" placeholder="Ask Gemini about IFRS 15 revenue recognition, Act 896, capital allowances..." onkeypress="if(event.key==='Enter') sendAIPrompt()" class="flex-1 p-2.5 text-xs rounded-xl bg-slate-900 border border-slate-700 focus:outline-none focus:border-purple-500">
-          <button onclick="sendAIPrompt()" class="px-5 py-2.5 bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs rounded-xl">Ask AI</button>
-        </div>
-      </div>
-    </section>
-
-    <!-- TAB 7: PERMANENT SAVED VAULT -->
-    <section id="sec-vault" class="space-y-4 hidden">
-      <div class="flex items-center justify-between">
-        <h2 class="text-sm font-bold flex items-center gap-2">
-          <i class="fa-solid fa-vault text-rose-400"></i> Saved Intelligence Vault
-        </h2>
-        <button onclick="clearVault()" class="text-xs text-rose-400 hover:underline font-bold">Clear All Vault Items</button>
-      </div>
-      <div id="vaultList" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
-    </section>
-
-  </main>
-
-  <!-- Gemini API Key Modal -->
-  <div id="apiKeyModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden no-print">
-    <div class="card-element p-5 rounded-2xl max-w-md w-full space-y-4 shadow-2xl">
-      <div class="flex justify-between items-center">
-        <h3 class="font-bold text-sm flex items-center gap-2">
-          <i class="fa-solid fa-key text-purple-400"></i> Set Gemini API Key
-        </h3>
-        <button onclick="closeApiKeyModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
-      </div>
-      <p class="text-xs text-slate-400 leading-relaxed">
-        Paste your Gemini API key below to enable direct generative AI responses for the AI Accounting Tutor. Your key is stored securely in your browser's local storage.
-      </p>
-      <input type="password" id="apiKeyInput" class="w-full p-2.5 text-xs rounded-xl bg-slate-900 border border-slate-700 focus:outline-none focus:border-purple-500 font-mono" placeholder="AIzaSy...">
-      <div class="flex justify-end gap-2">
-        <button onclick="clearApiKey()" class="px-3 py-2 rounded-xl bg-slate-800 text-rose-400 font-bold text-xs">Remove Key</button>
-        <button onclick="saveApiKey()" class="px-4 py-2 rounded-xl bg-purple-600 text-white font-bold text-xs">Save Key</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Mobile Bottom Floating Bar -->
-  <nav class="fixed bottom-0 left-0 right-0 bg-slate-900 border-t border-slate-800 flex justify-around py-2 px-2 z-40 md:hidden no-print text-[10px] font-bold">
-    <button onclick="switchTab('feed')" class="flex flex-col items-center gap-1 text-slate-400 hover:text-white">
-      <i class="fa-solid fa-newspaper text-sm"></i> News
-    </button>
-    <button onclick="switchTab('markets')" class="flex flex-col items-center gap-1 text-slate-400 hover:text-white">
-      <i class="fa-solid fa-chart-line text-sm"></i> Markets
-    </button>
-    <button onclick="switchTab('calculator')" class="flex flex-col items-center gap-1 text-slate-400 hover:text-white">
-      <i class="fa-solid fa-calculator text-sm"></i> PAYE
-    </button>
-    <button onclick="switchTab('ai')" class="flex flex-col items-center gap-1 text-slate-400 hover:text-white">
-      <i class="fa-solid fa-robot text-sm"></i> AI Tutor
-    </button>
-    <button onclick="switchTab('vault')" class="flex flex-col items-center gap-1 text-slate-400 hover:text-white">
-      <i class="fa-solid fa-vault text-sm"></i> Vault
-    </button>
-  </nav>
-
-  <!-- JavaScript Engine -->
-  <script>
-    // RSS Feed Matrix Engine
-    const RSS_MATRIX = {
-      ghana: {
-        all: 'https://news.google.com/rss/search?q=Ghana+tax+OR+Ghana+economy+OR+Ghana+Revenue+Authority&hl=en-GH&gl=GH&ceid=GH:en',
-        tax: 'https://news.google.com/rss/search?q=Ghana+Revenue+Authority+OR+Ghana+PAYE+OR+GRA+VAT&hl=en-GH&gl=GH&ceid=GH:en',
-        business: 'https://news.google.com/rss/search?q=Ghana+economy+OR+Ministry+of+Finance+Ghana+OR+BoG&hl=en-GH&gl=GH&ceid=GH:en',
-        accounting: 'https://news.google.com/rss/search?q=Institute+of+Chartered+Accountants+Ghana+OR+ICAG+IFRS&hl=en-GH&gl=GH&ceid=GH:en',
-        markets: 'https://news.google.com/rss/search?q=Ghana+Stock+Exchange+OR+GSE+Ghana+bonds&hl=en-GH&gl=GH&ceid=GH:en'
-      },
-      usa: {
-        all: 'https://news.google.com/rss/search?q=US+tax+policy+OR+US+economy+OR+Wall+Street&hl=en-US&gl=US&ceid=US:en',
-        tax: 'https://news.google.com/rss/search?q=IRS+tax+policy+OR+US+corporate+tax&hl=en-US&gl=US&ceid=US:en',
-        business: 'https://news.google.com/rss/search?q=US+economy+OR+Federal+Reserve+inflation&hl=en-US&gl=US&ceid=US:en',
-        accounting: 'https://news.google.com/rss/search?q=FASB+US+GAAP+accounting+standards&hl=en-US&gl=US&ceid=US:en',
-        markets: 'https://news.google.com/rss/search?q=S%26P+500+OR+Nasdaq+stock+market+news&hl=en-US&gl=US&ceid=US:en'
-      },
-      uk: {
-        all: 'https://news.google.com/rss/search?q=UK+tax+OR+HMRC+OR+Bank+of+England+economy&hl=en-GB&gl=GB&ceid=GB:en',
-        tax: 'https://news.google.com/rss/search?q=HMRC+tax+rates+OR+UK+budget+tax&hl=en-GB&gl=GB&ceid=GB:en',
-        business: 'https://news.google.com/rss/search?q=UK+economy+OR+Bank+of+England+interest+rates&hl=en-GB&gl=GB&ceid=GB:en',
-        accounting: 'https://news.google.com/rss/search?q=ICAEW+accounting+standards+UK&hl=en-GB&gl=GB&ceid=GB:en',
-        markets: 'https://news.google.com/rss/search?q=FTSE+100+London+stock+exchange&hl=en-GB&gl=GB&ceid=GB:en'
-      },
-      global: {
-        all: 'https://news.google.com/rss/search?q=Global+tax+OECD+OR+IFRS+accounting+OR+world+economy&hl=en-US&gl=US&ceid=US:en',
-        tax: 'https://news.google.com/rss/search?q=OECD+global+minimum+tax+Pillar+Two&hl=en-US&gl=US&ceid=US:en',
-        business: 'https://news.google.com/rss/search?q=World+Bank+IMF+global+economic+outlook&hl=en-US&gl=US&ceid=US:en',
-        accounting: 'https://news.google.com/rss/search?q=IFRS+Foundation+IASB+standards+update&hl=en-US&gl=US&ceid=US:en',
-        markets: 'https://news.google.com/rss/search?q=Global+financial+markets+commodities+gold&hl=en-US&gl=US&ceid=US:en'
-      }
-    };
-
-    let selectedRegion = 'ghana';
-    let selectedTopic = 'all';
-    let allArticles = [];
-    let vaultArticles = JSON.parse(localStorage.getItem('tax_saved_vault') || '[]');
-
-    window.onload = function() {
-      initTheme();
-      updateVaultBadge();
-      fetchFeeds();
-      runPayeCalc();
-      calcIAS21();
-      updateCountdowns();
-      checkApiKey();
-    };
-
-    // Theme Switcher
-    function initTheme() {
-      const savedTheme = localStorage.getItem('tax_theme') || 'dark';
-      document.documentElement.setAttribute('data-theme', savedTheme);
-      updateThemeUI(savedTheme);
-    }
-
-    function toggleTheme() {
-      const curr = document.documentElement.getAttribute('data-theme');
-      const next = curr === 'dark' ? 'light' : 'dark';
-      document.documentElement.setAttribute('data-theme', next);
-      localStorage.setItem('tax_theme', next);
-      updateThemeUI(next);
-    }
-
-    function updateThemeUI(theme) {
-      document.getElementById('themeIcon').className = theme === 'dark' ? 'fa-solid fa-sun text-yellow-400' : 'fa-solid fa-moon text-sky-400';
-      document.getElementById('themeText').innerText = theme === 'dark' ? 'Light' : 'Dark';
-    }
-
-    // Navigation Tabs
-    function switchTab(tabId) {
-      ['feed', 'markets', 'calculator', 'calendar', 'rates', 'ai', 'vault'].forEach(id => {
-        const sec = document.getElementById(`sec-${id}`);
-        if(sec) sec.classList.add('hidden');
-        const btn = document.getElementById(`tab-${id}`);
-        if(btn) btn.className = 'nav-tab px-3.5 py-2 rounded-xl whitespace-nowrap transition-all bg-slate-800 text-slate-300 hover:text-white';
-      });
-
-      document.getElementById(`sec-${tabId}`).classList.remove('hidden');
-      const activeBtn = document.getElementById(`tab-${tabId}`);
-      if(activeBtn) activeBtn.className = 'nav-tab px-3.5 py-2 rounded-xl whitespace-nowrap transition-all bg-emerald-500 text-slate-950 font-bold shadow-md';
-
-      if (tabId === 'vault') renderVault();
-    }
-
-    // Region & Topic Filters
-    function setRegion(reg) {
-      selectedRegion = reg;
-      ['ghana', 'usa', 'uk', 'global'].forEach(r => {
-        const btn = document.getElementById(`reg-${r}`);
-        if (btn) btn.className = 'reg-btn px-3 py-1.5 rounded-xl border border-slate-700 bg-slate-800/60 text-slate-400';
-      });
-      document.getElementById(`reg-${reg}`).className = 'reg-btn px-3 py-1.5 rounded-xl border border-emerald-500 bg-emerald-500/20 text-emerald-400 font-bold';
-      fetchFeeds();
-    }
-
-    function setTopic(top) {
-      selectedTopic = top;
-      ['all', 'tax', 'business', 'accounting', 'markets'].forEach(t => {
-        const btn = document.getElementById(`top-${t}`);
-        if (btn) btn.className = 'top-btn px-3 py-1 rounded-lg bg-slate-800 text-slate-400';
-      });
-      document.getElementById(`top-${top}`).className = 'top-btn px-3 py-1 rounded-lg bg-emerald-500 text-slate-950 font-bold';
-      fetchFeeds();
-    }
-
-    // Fetch RSS Feeds
-    async function fetchFeeds() {
-      showLoader(true);
-      const url = RSS_MATRIX[selectedRegion][selectedTopic];
-
-      try {
-        const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}`);
-        const data = await res.json();
-        
-        if (data.status === 'ok' && data.items) {
-          allArticles = data.items.map(item => ({
-            id: item.guid || item.link,
-            title: item.title,
-            description: cleanText(item.description || item.content),
-            link: item.link,
-            pubDate: new Date(item.pubDate || Date.now()),
-            category: selectedTopic.toUpperCase()
-          }));
-        } else {
-          allArticles = [];
-        }
-      } catch (e) {
-        allArticles = [];
-      }
-
-      showLoader(false);
-      renderArticles();
-    }
-
-    function renderArticles() {
-      const container = document.getElementById('articlesList');
-      const query = document.getElementById('searchInput').value.toLowerCase();
-      container.innerHTML = '';
-
-      let list = allArticles;
-      if (query) list = list.filter(a => a.title.toLowerCase().includes(query) || a.description.toLowerCase().includes(query));
-
-      if (!list.length) {
-        container.innerHTML = `<div class="col-span-full text-center py-8 text-xs text-slate-400">No matching updates found. Try selecting another region or topic.</div>`;
-        container.classList.remove('hidden');
-        return;
-      }
-
-      list.forEach(item => {
-        const isSaved = vaultArticles.some(v => v.id === item.id);
-        
-        container.insertAdjacentHTML('beforeend', `
-          <div class="card-element p-4 rounded-2xl space-y-2.5 border-l-4 border-l-emerald-500">
-            <div class="flex items-center justify-between text-[11px]">
-              <span class="font-extrabold uppercase px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400">${item.category}</span>
-              <span class="text-slate-400 font-medium">${new Date(item.pubDate).toLocaleDateString()}</span>
-            </div>
-            <h3 class="font-bold text-sm leading-snug">${item.title}</h3>
-            <p class="text-xs text-slate-400 leading-relaxed line-clamp-2">${item.description}</p>
-            
-            <div class="flex items-center justify-between pt-2 border-t border-slate-800 text-xs">
-              <button onclick="toggleVault('${encodeURIComponent(JSON.stringify(item))}')" class="px-2.5 py-1 rounded-lg bg-slate-800 text-slate-300 hover:text-white">
-                <i class="${isSaved ? 'fa-solid text-rose-500' : 'fa-regular'} fa-bookmark mr-1"></i> ${isSaved ? 'Saved' : 'Bookmark'}
-              </button>
-              <a href="${item.link}" target="_blank" rel="noopener" class="px-3 py-1 rounded-lg bg-emerald-500/20 text-emerald-400 font-bold text-[11px]">Read Full Coverage &rarr;</a>
-            </div>
-          </div>
-        `);
-      });
-
-      container.classList.remove('hidden');
-    }
-
-    // PAYE Calculator
-    function runPayeCalc() {
-      const basic = parseFloat(document.getElementById('calcBasic').value) || 0;
-      const allowance = parseFloat(document.getElementById('calcAllowance').value) || 0;
-      const tier3Pct = parseFloat(document.getElementById('calcTier3').value) || 0;
-
-      const gross = basic + allowance;
-      const ssnitEmployee = basic * 0.055;
-      const ssnitEmployer = basic * 0.13;
-      const tier3Relief = basic * (tier3Pct / 100);
-
-      const taxableIncome = Math.max(0, gross - ssnitEmployee - tier3Relief);
-
-      let tax = 0;
-      let rem = taxableIncome;
-
-      const bands = [
-        { limit: 490, rate: 0.00 },
-        { limit: 110, rate: 0.05 },
-        { limit: 130, rate: 0.10 },
-        { limit: 3166.67, rate: 0.175 },
-        { limit: 16000.00, rate: 0.25 },
-        { limit: 30500.00, rate: 0.30 }
-      ];
-
-      for (const b of bands) {
-        if (rem <= 0) break;
-        const chunk = Math.min(rem, b.limit);
-        tax += chunk * b.rate;
-        rem -= chunk;
-      }
-      if (rem > 0) tax += rem * 0.35;
-
-      const net = gross - ssnitEmployee - tier3Relief - tax;
-
-      document.getElementById('outGross').innerText = `GH₵ ${gross.toFixed(2)}`;
-      document.getElementById('outSSNIT').innerText = `GH₵ ${ssnitEmployee.toFixed(2)}`;
-      document.getElementById('outTier3').innerText = `GH₵ ${tier3Relief.toFixed(2)}`;
-      document.getElementById('outTaxable').innerText = `GH₵ ${taxableIncome.toFixed(2)}`;
-      document.getElementById('outPAYE').innerText = `GH₵ ${tax.toFixed(2)}`;
-      document.getElementById('outEmployerSSNIT').innerText = `GH₵ ${ssnitEmployer.toFixed(2)}`;
-      document.getElementById('outNet').innerText = `GH₵ ${net.toFixed(2)}`;
-    }
-
-    // IAS 21 FX Calc
-    function calcIAS21() {
-      const amt = parseFloat(document.getElementById('fxAmt').value) || 0;
-      const book = parseFloat(document.getElementById('fxBook').value) || 0;
-      const spot = parseFloat(document.getElementById('fxSpot').value) || 0;
-
-      const bookVal = amt * book;
-      const spotVal = amt * spot;
-      const diff = spotVal - bookVal;
-
-      document.getElementById('outFxBook').innerText = `GH₵ ${bookVal.toFixed(2)}`;
-      document.getElementById('outFxSpot').innerText = `GH₵ ${spotVal.toFixed(2)}`;
-      document.getElementById('outFxDiff').innerText = `GH₵ ${diff.toFixed(2)} (${diff >= 0 ? 'Gain' : 'Loss'})`;
-      document.getElementById('outFxDiff').className = `font-mono ${diff >= 0 ? 'text-emerald-400' : 'text-rose-400'}`;
-    }
-
-    // Statutory Deadlines Countdown
-    function updateCountdowns() {
-      const now = new Date();
-      const year = now.getFullYear();
-      const month = now.getMonth();
-
-      const payeDate = new Date(year, month, 15);
-      if (now > payeDate) payeDate.setMonth(month + 1);
-
-      const ssnitDate = new Date(year, month, 14);
-      if (now > ssnitDate) ssnitDate.setMonth(month + 1);
-
-      const vatDate = new Date(year, month + 1, 0);
-
-      document.getElementById('cd-paye').innerText = `${Math.ceil((payeDate - now) / (1000 * 60 * 60 * 24))} Days Left`;
-      document.getElementById('cd-ssnit').innerText = `${Math.ceil((ssnitDate - now) / (1000 * 60 * 60 * 24))} Days Left`;
-      document.getElementById('cd-vat').innerText = `${Math.ceil((vatDate - now) / (1000 * 60 * 60 * 24))} Days Left`;
-    }
-
-    // Gemini AI Accounting Tutor
-    function sendAIPrompt() {
-      const input = document.getElementById('aiInput');
-      const text = input.value.trim();
-      if (!text) return;
-      askAI(text);
-      input.value = '';
-    }
-
-    async function askAI(promptText) {
-      const chatBox = document.getElementById('aiChatBox');
-      chatBox.insertAdjacentHTML('beforeend', `
-        <div class="p-3 rounded-xl bg-slate-800 text-slate-100 font-medium">
-          <strong>👤 You:</strong> ${promptText}
-        </div>
-      `);
-
-      const apiKey = localStorage.getItem('gemini_api_key');
-      let replyText = "";
-
-      if (apiKey) {
-        // Direct Call to Gemini API
-        try {
-          const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              contents: [{ parts: [{ text: `Act as a senior chartered accountant and tax consultant specializing in Ghana Tax Acts (Act 896 & Act 1178) and IFRS standards. Provide a comprehensive, detailed answer to: ${promptText}` }] }]
-            })
-          });
-          const data = await res.json();
-          replyText = data.candidates?.[0]?.content?.parts?.[0]?.text || "Unable to retrieve response from Gemini API.";
-        } catch (e) {
-          replyText = "Error connecting to Gemini API. Please check your API key.";
-        }
-      } else {
-        // Fallback Detailed Rule Engine
-        replyText = getFallbackResponse(promptText);
-      }
-
-      chatBox.insertAdjacentHTML('beforeend', `
-        <div class="p-3.5 rounded-xl bg-purple-500/10 border border-purple-500/20 text-purple-200">
-          <strong>🤖 Gemini AI Assistant:</strong><br>${replyText.replace(/\n/g, '<br>')}
-        </div>
-      `);
-      chatBox.scrollTop = chatBox.scrollHeight;
-    }
-
-    function getFallbackResponse(t) {
-      const q = t.toLowerCase();
-      if (q.includes('ifrs 16') || q.includes('lease')) {
-        return "<strong>IFRS 16 Leases Analysis:</strong>\n1. Lessee Balance Sheet: Recognizes Right-of-Use (ROU) Asset and Lease Liability for all leases.\n2. P&L Impact: Replaces rent expense with ROU Asset Depreciation and Lease Liability Interest Expense.\n3. Exemptions: Short-term leases (<12 months) and low-value assets can be expensed straight-line.";
-      } else if (q.includes('wht') || q.includes('withholding')) {
-        return "<strong>Ghana Income Tax Act 896 Withholding Tax Rates:</strong>\n- Supply of Goods: 3%\n- Supply of Services: 7.5%\n- Works / Construction: 5%\n- Dividends / Interest (Residents): 8%\n- Rent (Residential): 8% / Rent (Commercial): 15%";
-      } else if (q.includes('capital allowance') || q.includes('depreciation')) {
-        return "<strong>Capital Allowances (Act 896 3rd Schedule):</strong>\n- Class 1 (Computers & Data Processing): 40% Straight Line (3 years)\n- Class 2 (Automobiles & Plant): 30% Reducing Balance\n- Class 3 (Railways, Vessels & Aircraft): 20% Reducing Balance\n- Class 4 (Buildings): 10% Straight Line (10 years)";
-      }
-      return "Under Ghana tax legislation (Act 896 & Act 1178) and IFRS standards, corporate compliance requires strict statutory documentation, filing by specified deadlines, and adhering to financial reporting requirements. Connect a Gemini API key for live custom AI answers.";
-    }
-
-    // Vault Functions
-    function toggleVault(encoded) {
-      const item = JSON.parse(decodeURIComponent(encoded));
-      const idx = vaultArticles.findIndex(v => v.id === item.id);
-      if (idx > -1) vaultArticles.splice(idx, 1);
-      else vaultArticles.push(item);
-      localStorage.setItem('tax_saved_vault', JSON.stringify(vaultArticles));
-      updateVaultBadge();
-      renderArticles();
-    }
-
-    function renderVault() {
-      const container = document.getElementById('vaultList');
-      container.innerHTML = '';
-      if (!vaultArticles.length) {
-        container.innerHTML = `<div class="col-span-full text-center py-8 text-xs text-slate-400">Vault is empty. Bookmark news items to keep them stored permanently.</div>`;
-        return;
-      }
-      vaultArticles.forEach(item => {
-        container.insertAdjacentHTML('beforeend', `
-          <div class="card-element p-4 rounded-2xl space-y-2 border-l-4 border-l-rose-500">
-            <h3 class="font-bold text-sm leading-snug">${item.title}</h3>
-            <p class="text-xs text-slate-400 line-clamp-2">${item.description}</p>
-            <div class="flex items-center justify-between pt-2 border-t border-slate-800 text-xs">
-              <a href="${item.link}" target="_blank" rel="noopener" class="text-emerald-400 font-bold">Open Link &rarr;</a>
-              <button onclick="toggleVault('${encodeURIComponent(JSON.stringify(item))}')" class="text-rose-400 font-semibold">Remove</button>
-            </div>
-          </div>
-        `);
-      });
-    }
-
-    function clearVault() {
-      vaultArticles = [];
-      localStorage.setItem('tax_saved_vault', '[]');
-      updateVaultBadge();
-      renderVault();
-    }
-
-    function updateVaultBadge() { document.getElementById('vaultBadge').innerText = vaultArticles.length; }
-
-    // API Key Modal
-    function openApiKeyModal() {
-      document.getElementById('apiKeyInput').value = localStorage.getItem('gemini_api_key') || '';
-      document.getElementById('apiKeyModal').classList.remove('hidden');
-    }
-
-    function closeApiKeyModal() { document.getElementById('apiKeyModal').classList.add('hidden'); }
-
-    function saveApiKey() {
-      const key = document.getElementById('apiKeyInput').value.trim();
-      if (key) localStorage.setItem('gemini_api_key', key);
-      else localStorage.removeItem('gemini_api_key');
-      checkApiKey();
-      closeApiKeyModal();
-    }
-
-    function clearApiKey() {
-      localStorage.removeItem('gemini_api_key');
-      document.getElementById('apiKeyInput').value = '';
-      checkApiKey();
-      closeApiKeyModal();
-    }
-
-    function checkApiKey() {
-      const key = localStorage.getItem('gemini_api_key');
-      const label = document.getElementById('keyBtnLabel');
-      if (label) label.innerText = key ? 'Key Set' : 'Gemini Key';
-    }
-
-    // Utilities
-    function cleanText(html) {
-      const d = document.createElement('div');
-      d.innerHTML = html || '';
-      return d.textContent || d.innerText || '';
-    }
-
-    function requestNotificationPermission() {
-      if (!("Notification" in window)) {
-        alert("Web notifications not supported on this browser.");
-        return;
-      }
-      Notification.requestPermission().then(p => {
-        if (p === "granted") alert("Alerts enabled successfully!");
-      });
-    }
-
-    function showLoader(s) { document.getElementById('loader').classList.toggle('hidden', !s); }
-  </script>
-</body>
-</html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="TaxHub GH">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0b3d2e">
+<title>TaxHub Ghana</title>
+<style>
+:root{--bg:#f6f4ee;--card:#fff;--tx:#17211c;--mut:#667;--ac:#0b6b4a;--gold:#f5c542;--bd:#e3e0d5;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1512;--card:#17211c;--tx:#e8efe9;--mut:#9ab;--ac:#3fcf94;--bd:#2a3a32;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0e1512;--card:#17211c;--tx:#e8efe9;--mut:#9ab;--ac:#3fcf94;--bd:#2a3a32;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.5 system-ui,-apple-system,sans-serif}
+header{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;background:linear-gradient(120deg,#0b3d2e,#0b6b4a);color:#fff}
+header h1{margin:0;font-size:18px}header small{opacity:.8;display:block;font-size:12px}
+button,select,input,textarea{font:inherit;color:var(--tx);background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:8px 10px}
+button{cursor:pointer}button.p{background:var(--ac);color:#fff;border:0}
+nav{display:flex;gap:6px;overflow-x:auto;padding:10px 12px;position:sticky;top:0;background:var(--bg);z-index:5}
+nav button{white-space:nowrap}nav button.on{background:var(--ac);color:#fff;border-color:var(--ac)}
+main{padding:0 12px 80px;max-width:820px;margin:auto}section{display:none}section.on{display:block}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:14px;margin:10px 0}
+.card.hit{border:2px solid var(--gold);box-shadow:0 0 0 3px rgba(245,197,66,.25)}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}.row>*{flex:1;min-width:120px}
+.tag{font-size:11px;background:var(--bd);border-radius:20px;padding:2px 8px;margin-right:4px}
+.mut{color:var(--mut);font-size:13px}table{width:100%;border-collapse:collapse}td,th{padding:6px 4px;border-bottom:1px solid var(--bd);text-align:left}td.r,th.r{text-align:right}
+.big{font-size:26px;font-weight:700;color:var(--ac)}.up{color:#1a9e5c}.dn{color:#d33}
+.sum{display:none;background:var(--bg);border-radius:10px;padding:10px;margin-top:8px}.sum.on{display:block}
+mark{background:var(--gold);color:#000;padding:0 2px;border-radius:3px}
+@media print{header,nav,.noprint{display:none!important}section{display:none!important}section.pr{display:block!important}}
+</style></head><body>
+<header><div><h1>TaxHub Ghana</h1><small>Tax · Finance · Markets · Compliance</small></div><button id="th" title="Theme">🌓</button></header>
+<nav id="nav"></nav>
+<main>
+
+<section id="news" class="on">
+<div class="card noprint">
+<div class="row"><select id="fc"><option value="">All categories</option><option>Tax</option><option>Business</option><option>Finance</option><option>Markets</option><option>Standards</option></select>
+<select id="fr"><option value="">All regions</option><option>Ghana</option><option>USA</option><option>UK</option><option>Nigeria</option><option>Global</option></select>
+<input id="fq" placeholder="Search…"></div>
+<div class="row"><input id="kw" placeholder="Alert keywords: WHT, E-Levy, IFRS 18…"><button id="kws" class="p">Save alerts</button><button id="nt">🔔 Enable</button></div>
+<div class="mut" id="kwl"></div></div>
+<details class="card noprint"><summary><b>＋ Add / paste an article</b></summary>
+<div class="row"><input id="at" placeholder="Headline"><input id="as" placeholder="Source (GRA, Yahoo Finance…)"></div>
+<div class="row"><select id="ac"><option>Tax</option><option>Business</option><option>Finance</option><option>Markets</option><option>Standards</option></select><select id="ar"><option>Ghana</option><option>USA</option><option>UK</option><option>Nigeria</option><option>Global</option></select><input id="al" placeholder="Link (optional)"></div>
+<textarea id="ab" rows="4" style="width:100%" placeholder="Paste article text"></textarea>
+<div class="row"><button id="aa" class="p">Add to feed</button></div></details>
+<div id="nl"></div></section>
+
+<section id="calc"><div class="card"><h3>PAYE &amp; Net Salary (monthly, GHS)</h3>
+<div class="row"><input id="bs" type="number" placeholder="Basic salary"><input id="al2" type="number" placeholder="Allowances"></div>
+<div class="row"><input id="t3" type="number" placeholder="Tier 3 voluntary %" value="0"><input id="t2" type="number" placeholder="Tier 2 % (of basic)" value="5"></div>
+<button class="p" id="go">Calculate</button></div><div id="cr"></div>
+<p class="mut">Bands (monthly): 0–490 @0%, next 110 @5%, next 130 @10%, next 3,166.67 @17.5%, next 16,000 @25%, next 30,520 @30%, above @35%. Verify against the latest GRA notice and Act 1178 before relying on figures.</p></section>
+
+<section id="cal"><div id="cd"></div></section>
+
+<section id="rates"><div class="card"><h3>GRA Rate Watch</h3>
+<p class="mut">Rates you track. Edit any rate when GRA changes it: the change is logged with a date and shown as an alert banner.</p><div id="rt"></div>
+<div class="row"><input id="rn" placeholder="Tax name"><input id="rv" placeholder="Rate (e.g. 15%)"><button id="ra" class="p">Track</button></div></div>
+<div class="card"><h4>Change log</h4><div id="rl" class="mut">No changes yet.</div></div></section>
+
+<section id="mk"><div class="card"><h3>Markets &amp; BoG Rates</h3><p class="mut">Values are demo until you update them. Enter the latest price to extend the chart.</p><div id="mt"></div></div>
+<div class="card"><h4>BoG reference rates (GHS)</h4><div id="fx"></div><div class="row"><input id="fxu" type="number" step="0.0001" placeholder="USD"><input id="fxg" type="number" step="0.0001" placeholder="GBP"><input id="fxe" type="number" step="0.0001" placeholder="EUR"><button id="fxs" class="p">Save</button></div>
+<h4>IAS 21 gain/loss</h4><div class="row"><input id="fa" type="number" placeholder="Foreign amount"><input id="fb" type="number" placeholder="Booking rate"><input id="fc2" type="number" placeholder="Closing rate"></div><div id="fr2" class="big"></div></div></section>
+
+<section id="vault"><div class="card noprint"><button id="pr" class="p">⬇ Export / Print to PDF</button><p class="mut">Choose “Save as PDF” in the print dialog.</p></div><div id="vl"></div></section>
+
+<section id="ai"><div class="card"><h3>Tutor questions</h3><p class="mut">Gemini can't be connected from this standalone page (needs a private server key). Use this checklist to prepare a detailed prompt, then paste it into Gemini.</p>
+<textarea id="q" rows="3" style="width:100%" placeholder="e.g. How is WHT on services applied to non-residents?"></textarea>
+<div class="row"><button id="qb" class="p">Build detailed Gemini prompt</button></div><textarea id="qo" rows="8" style="width:100%"></textarea></div></section>
+</main>
+<script>
+const $=id=>document.getElementById(id),S={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const tabs=[['news','📰 News'],['calc','🧮 PAYE'],['cal','📅 Deadlines'],['rates','🔔 Rate Watch'],['mk','📈 Markets'],['vault','🗄 Vault'],['ai','🤖 Tutor']];
+$('nav').innerHTML=tabs.map(t=>`<button data-t="${t[0]}">${t[1]}</button>`).join('');
+function show(id){document.querySelectorAll('section').forEach(s=>s.classList.toggle('on',s.id==id));document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.t==id));document.querySelectorAll('section').forEach(s=>s.classList.toggle('pr',s.id=='vault'));if(id=='cal')cd();location.hash=id}
+$('nav').onclick=e=>{if(e.target.dataset.t)show(e.target.dataset.t)};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const fm=n=>n.toLocaleString('en-GH',{minimumFractionDigits:2,maximumFractionDigits:2});
+// theme
+function theme(t){document.documentElement.dataset.theme=t;S.set('theme',t)}
+theme(S.get('theme',matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light'));
+$('th').onclick=()=>theme(document.documentElement.dataset.theme=='dark'?'light':'dark');
+// news
+let arts=S.get('arts',null)||[
+{id:1,t:'Sample: GRA publishes guidance on withholding tax on services',s:'Sample',c:'Tax',r:'Ghana',b:'Companies and SMEs must withhold tax on payments for services and remit to GRA by the 15th of the following month. Exporters and salaried employees are not directly affected. File the return and review contracts before the next payment.',d:Date.now()},
+{id:2,t:'Sample: IFRS 18 replaces IAS 1 on financial statement presentation',s:'Sample',c:'Standards',r:'Global',b:'Listed companies and banks will need to restructure the income statement. Accountants should map current line items to the new categories and plan system changes before the effective date.',d:Date.now()-864e5},
+{id:3,t:'Sample: Business confidence improves as cedi stabilises',s:'Sample',c:'Business',r:'Ghana',b:'Importers and exporters may see easier pricing. Review foreign currency contracts.',d:Date.now()-2*864e5}];
+let vault=S.get('vault',[]),kws=S.get('kws',[]);
+const hit=a=>kws.some(k=>(a.t+' '+a.b).toLowerCase().includes(k.toLowerCase()));
+function summ(a){const x=a.b,l=x.toLowerCase();const who=[['SMEs','sme'],['Companies','compan'],['Banks','bank'],['Exporters','export'],['Importers','import'],['Salaried employees','salar|employee|paye'],['Listed firms','listed'],['Accountants','accountant']].filter(p=>new RegExp(p[1]).test(l)).map(p=>p[0]);
+const act=x.split(/(?<=[.!?])\s+/).filter(s=>/must|should|file|submit|review|remit|deadline|plan|ensure/i.test(s));
+return `<b>Headline:</b> ${esc(a.t)}<br><b>Impacts:</b> ${who.join(', ')||'General readers'}<br><b>Action:</b> ${esc(act.join(' ')||'No action stated; monitor.')}`}
+function hl(s){let o=esc(s);kws.forEach(k=>{if(k)o=o.replace(new RegExp('('+k.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','gi'),'<mark>$1</mark>')});return o}
+function news(){const c=$('fc').value,r=$('fr').value,q=$('fq').value.toLowerCase();
+const L=arts.filter(a=>(!c||a.c==c)&&(!r||a.r==r||a.r=='Global'&&r)&&(!q||(a.t+a.b).toLowerCase().includes(q))).sort((x,y)=>hit(y)-hit(x)||y.d-x.d);
+$('nl').innerHTML=L.map(a=>`<div class="card ${hit(a)?'hit':''}"><span class="tag">${a.c}</span><span class="tag">${a.r}</span><span class="mut">${esc(a.s)} · ${new Date(a.d).toLocaleDateString()}</span><h4 style="margin:6px 0">${hl(a.t)}</h4><div class="mut">${hl(a.b.slice(0,200))}…</div>
+<div class="row noprint"><button data-a="sum" data-i="${a.id}">Summary &amp; Impact</button><button data-a="sv" data-i="${a.id}">${vault.some(v=>v.id==a.id)?'✓ Saved':'☆ Save'}</button>${a.l?`<a href="${esc(a.l)}" target="_blank" rel="noopener"><button>Open</button></a>`:''}</div><div class="sum" id="s${a.id}">${summ(a)}</div></div>`).join('')||'<p class="mut">No articles.</p>';
+$('kwl').textContent=kws.length?'Alerts: '+kws.join(', '):'No alert keywords set.';
+S.set('arts',arts)}
+$('nl').onclick=e=>{const b=e.target.closest('button');if(!b)return;const i=+b.dataset.i;if(b.dataset.a=='sum')$('s'+i).classList.toggle('on');if(b.dataset.a=='sv'){const a=arts.find(x=>x.id==i);if(!vault.some(v=>v.id==i))vault.push(a);else vault=vault.filter(v=>v.id!=i);S.set('vault',vault);news();vl()}};
+['fc','fr'].forEach(i=>$(i).onchange=news);$('fq').oninput=news;
+$('kws').onclick=()=>{kws=$('kw').value.split(',').map(s=>s.trim()).filter(Boolean);S.set('kws',kws);news()};
+$('nt').onclick=()=>{if('Notification' in window)Notification.requestPermission().then(p=>alert(p=='granted'?'Alerts on while the app is open.':'Notifications not allowed.'));else alert('Notifications not supported in this browser.')};
+$('aa').onclick=()=>{if(!$('at').value)return;const a={id:Date.now(),t:$('at').value,s:$('as').value||'Manual',c:$('ac').value,r:$('ar').value,l:$('al').value,b:$('ab').value||$('at').value,d:Date.now()};arts.unshift(a);if(hit(a)&&'Notification' in window&&Notification.permission=='granted')new Notification('Keyword match',{body:a.t});['at','as','al','ab'].forEach(i=>$(i).value='');news()};
+function vl(){$('vl').innerHTML=vault.map(a=>`<div class="card"><span class="tag">${a.c}</span><span class="tag">${a.r}</span><h4>${esc(a.t)}</h4><p>${esc(a.b)}</p><div class="mut">${esc(a.s)}</div></div>`).join('')||'<p class="mut">Saved articles appear here permanently.</p>'}
+$('pr').onclick=()=>print();
+// PAYE
+const bands=[[490,0],[110,.05],[130,.1],[3166.67,.175],[16000,.25],[30520,.3],[Infinity,.35]];
+$('go').onclick=()=>{const b=+$('bs').value||0,al=+$('al2').value||0,t3=(+$('t3').value||0)/100*b,t2=(+$('t2').value||0)/100*b,gross=b+al,ss=b*.055,er=b*.13,tx=Math.max(0,gross-ss-t3);let rem=tx,tax=0,rows='';
+for(const[w,r]of bands){const a=Math.min(rem,w);if(a>0){tax+=a*r;rows+=`<tr><td>${fm(a)} @ ${r*100}%</td><td class="r">${fm(a*r)}</td></tr>`}rem-=a;if(rem<=0)break}
+const net=gross-ss-t3-tax;$('cr').innerHTML=`<div class="card"><div class="mut">Net take-home</div><div class="big">GHS ${fm(net)}</div><table><tr><td>Gross pay</td><td class="r">${fm(gross)}</td></tr><tr><td>Employee SSNIT 5.5%</td><td class="r">${fm(ss)}</td></tr><tr><td>Tier 3 voluntary</td><td class="r">${fm(t3)}</td></tr><tr><td>Taxable income</td><td class="r">${fm(tx)}</td></tr><tr><td><b>PAYE</b></td><td class="r"><b>${fm(tax)}</b></td></tr><tr><td>Employer SSNIT 13%</td><td class="r">${fm(er)}</td></tr><tr><td>Of which Tier 2 (to trustee)</td><td class="r">${fm(t2)}</td></tr></table><h4>PAYE bands applied</h4><table>${rows}</table></div>`};
+// deadlines
+function nextDay(d){const n=new Date(),t=new Date(n.getFullYear(),n.getMonth(),d);if(t<new Date(n.getFullYear(),n.getMonth(),n.getDate()))t.setMonth(t.getMonth()+1);return t}
+function eom(){const n=new Date();return new Date(n.getFullYear(),n.getMonth()+1,0)}
+function qtr(){const n=new Date(),y=n.getFullYear();return[new Date(y,2,31),new Date(y,5,30),new Date(y,8,30),new Date(y,11,31)].find(d=>d>=new Date(y,n.getMonth(),n.getDate()))||new Date(y+1,2,31)}
+function cd(){const L=[['PAYE remittance to GRA',nextDay(15)],['SSNIT contributions',nextDay(15)],['VAT / NHIL / GETFund / COVID-19 Levy',eom()],['CIT provisional instalment',qtr()]];const t0=new Date();t0.setHours(0,0,0,0);
+$('cd').innerHTML=L.map(([n,d])=>{const k=Math.round((d-t0)/864e5);return`<div class="card"><b>${n}</b><div class="mut">${d.toDateString()}</div><div class="big ${k<=3?'dn':''}">${k} day${k==1?'':'s'}</div></div>`}).join('')+'<p class="mut">Weekend deadlines may shift. Confirm with GRA.</p>'}
+// rate watch
+let rates=S.get('rates',[{n:'VAT',v:'15%'},{n:'NHIL',v:'2.5%'},{n:'GETFund Levy',v:'2.5%'},{n:'COVID-19 Levy',v:'1%'},{n:'Corporate Income Tax',v:'25%'},{n:'Withholding tax (services, resident)',v:'7.5%'}]),log=S.get('rlog',[]);
+function rt(){$('rt').innerHTML='<table>'+rates.map((r,i)=>`<tr><td>${esc(r.n)}</td><td><input data-i="${i}" value="${esc(r.v)}" style="width:90px"></td></tr>`).join('')+'</table><p class="mut">Verify starting values on gra.gov.gh.</p>';$('rl').innerHTML=log.length?log.map(l=>`<div>⚠ <b>${esc(l.n)}</b>: ${esc(l.o)} → ${esc(l.v)} <span class="mut">(${l.d})</span></div>`).join(''):'No changes yet.';S.set('rates',rates);S.set('rlog',log)}
+$('rt').onchange=e=>{const i=+e.target.dataset.i,r=rates[i];if(e.target.value!=r.v){log.unshift({n:r.n,o:r.v,v:e.target.value,d:new Date().toLocaleDateString()});r.v=e.target.value;rt()}};
+$('ra').onclick=()=>{if($('rn').value){rates.push({n:$('rn').value,v:$('rv').value});$('rn').value=$('rv').value='';rt()}};
+// markets
+let mk=S.get('mk',[{n:'GCB Bank (GSE)',p:[4.1,4.2,4.15,4.3,4.4,4.35,4.5]},{n:'MTN Ghana (GSE)',p:[1.9,1.95,1.92,2.0,2.05,2.02,2.1]},{n:'AAPL (NASDAQ)',p:[190,192,191,195,194,197,199]},{n:'JSE Top 40',p:[70,71,70.5,72,71.8,73,72.5]}]);
+function spark(p){const mn=Math.min(...p),mx=Math.max(...p),w=100,h=28,pts=p.map((v,i)=>(i/(p.length-1)*w)+','+(h-(v-mn)/((mx-mn)||1)*h)).join(' ');return`<svg width="100" height="30" viewBox="0 0 100 30"><polyline points="${pts}" fill="none" stroke="currentColor" stroke-width="2"/></svg>`}
+function mt(){$('mt').innerHTML='<table>'+mk.map((m,i)=>{const l=m.p[m.p.length-1],c=(l/m.p[m.p.length-2]-1)*100,up=c>=0;return`<tr><td>${esc(m.n)}<div class="mut">${up?'Trend up':'Trend down'}</div></td><td class="${up?'up':'dn'}">${spark(m.p)}</td><td class="r">${fm(l)}<br><span class="${up?'up':'dn'}">${up?'+':''}${c.toFixed(2)}%</span></td><td><input data-i="${i}" type="number" step="0.01" placeholder="new" style="width:70px"></td></tr>`}).join('')+'</table>';S.set('mk',mk)}
+$('mt').onchange=e=>{if(e.target.value){mk[+e.target.dataset.i].p.push(+e.target.value);mt()}};
+let fxr=S.get('fx',{USD:0,GBP:0,EUR:0});
+function fx(){$('fx').innerHTML=Object.entries(fxr).map(([k,v])=>`<span class="tag">${k}/GHS ${v?v:'—'}</span>`).join('');S.set('fx',fxr)}
+$('fxs').onclick=()=>{fxr={USD:+$('fxu').value||fxr.USD,GBP:+$('fxg').value||fxr.GBP,EUR:+$('fxe').value||fxr.EUR};fx()};
+['fa','fb','fc2'].forEach(i=>$(i).oninput=()=>{const a=+$('fa').value,g=a*((+$('fc2').value)-(+$('fb').value));$('fr2').textContent=a?(g>=0?'Gain ':'Loss ')+'GHS '+fm(Math.abs(g)):''});
+// tutor
+$('qb').onclick=()=>{$('qo').value=`Act as a senior Ghana tax and accounting expert. Answer in depth with these parts: 1) Plain-English explanation 2) Legal basis (Act, section, GRA practice note) 3) Step-by-step worked example in GHS 4) Common mistakes and penalties 5) How IFRS/IAS treatment differs 6) Practical checklist. Question: ${$('q').value}`};
+// swipe the PWA
+vl();news();rt();mt();fx();cd();show((location.hash||'#news').slice(1)||'news');
+</script></body></html>
