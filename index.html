@@ -1,696 +1,312 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark" class="h-full">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Ghana Tax & Accounting Intelligence Hub</title>
-
-  <!-- PWA Settings -->
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="TaxHub GH">
-  <meta name="theme-color" content="#0f172a">
-  <link rel="apple-touch-icon" href="https://placehold.co/180x180/0f172a/22c55e?text=TAX+GH">
-
-  <!-- Tailwind CSS & FontAwesome Icons -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      darkMode: ['class', '[data-theme="dark"]'],
-      theme: {
-        extend: {
-          colors: {
-            brand: {
-              50: '#f0fdf4',
-              400: '#4ade80',
-              500: '#22c55e',
-              600: '#16a34a',
-              700: '#15803d',
-              900: '#14532d'
-            }
-          }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ghana Tax & Accounting Intelligence Hub</title>
+    <script src="https://cloudflare.com"></script>
+    <style>
+        :root {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent-gold: #eab308;
+            --accent-green: #10b981;
+            --accent-red: #ef4444;
+            --border-color: #334155;
         }
-      }
-    }
-  </script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  
-  <style>
-    ::-webkit-scrollbar { width: 5px; height: 5px; }
-    ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 9999px; }
-    
-    .glass-panel {
-      background: var(--glass-bg);
-      backdrop-filter: blur(12px);
-      border: 1px solid var(--glass-border);
-    }
-    
-    [data-theme="dark"] {
-      --glass-bg: rgba(15, 23, 42, 0.85);
-      --glass-border: rgba(255, 255, 255, 0.08);
-      --main-bg: #090d16;
-      --card-bg: #1e293b;
-      --text-main: #f8fafc;
-      --text-sub: #94a3b8;
-    }
-    
-    [data-theme="light"] {
-      --glass-bg: rgba(255, 255, 255, 0.88);
-      --glass-border: rgba(0, 0, 0, 0.08);
-      --main-bg: #f8fafc;
-      --card-bg: #ffffff;
-      --text-main: #0f172a;
-      --text-sub: #475569;
-    }
 
-    body {
-      background-color: var(--main-bg);
-      color: var(--text-main);
-      -webkit-tap-highlight-color: transparent;
-    }
+        [data-theme="light"] {
+            --bg-primary: #f8fafc;
+            --bg-secondary: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --accent-gold: #d97706;
+            --accent-green: #059669;
+            --accent-red: #dc2626;
+            --border-color: #cbd5e1;
+        }
 
-    .hide-scrollbar::-webkit-scrollbar { display: none; }
-    .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
 
-    /* Print Styles for PDF Export */
-    @media print {
-      header, nav, #alertConfigModal, .no-print, button { display: none !important; }
-      body { background: white !important; color: black !important; padding: 0 !important; }
-      main { max-width: 100% !important; margin: 0 !important; padding: 0 !important; }
-      .glass-panel, .card { border: 1px solid #ccc !important; box-shadow: none !important; background: white !important; color: black !important; page-break-inside: avoid; }
-      .text-white, .text-slate-100, .text-slate-200, .text-slate-300 { color: black !important; }
-    }
-  </style>
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            padding: 20px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--border-color);
+            margin-bottom: 30px;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .gh-flag {
+            font-size: 2rem;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        button.btn-tool {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 10px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        button.btn-tool:hover {
+            border-color: var(--accent-gold);
+        }
+
+        .alert-banner {
+            background: rgba(234, 179, 8, 0.1);
+            border: 1px solid var(--accent-gold);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+        }
+
+        .card h2 {
+            font-size: 1.25rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--accent-gold);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 8px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            font-size: 0.875rem;
+            margin-bottom: 5px;
+            color: var(--text-muted);
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--accent-gold);
+        }
+
+        .results-box {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            font-size: 0.95rem;
+        }
+
+        .results-line {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .results-line:last-child {
+            margin-bottom: 0;
+            padding-top: 8px;
+            border-top: 1px dashed var(--border-color);
+            font-weight: bold;
+        }
+
+        .highlight-val {
+            color: var(--accent-green);
+        }
+
+        .negative-val {
+            color: var(--accent-red);
+        }
+
+        .countdown-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .countdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .days-badge {
+            background: var(--bg-primary);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            border: 1px solid var(--border-color);
+        }
+
+        .days-urgent {
+            border-color: var(--accent-red);
+            color: var(--accent-red);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+            margin-top: 10px;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .advisor-box {
+            background: rgba(16, 185, 129, 0.05);
+            border-left: 4px solid var(--accent-green);
+            padding: 12px;
+            margin-top: 15px;
+            border-radius: 0 8px 8px 0;
+            font-size: 0.9rem;
+        }
+
+        .keyword-pill {
+            display: inline-flex;
+            align-items: center;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            padding: 3px 8px;
+            border-radius: 4px;
+            margin: 4px;
+            font-size: 0.8rem;
+        }
+
+        .keyword-pill i {
+            margin-left: 6px;
+            cursor: pointer;
+            color: var(--accent-red);
+        }
+
+        @media print {
+            body { background: white; color: black; }
+            .card { border: 1px solid #ccc; box-shadow: none; page-break-inside: avoid; }
+            .controls, .alert-banner, .config-panel { display: none !important; }
+            input, select { border: none; background: transparent; padding: 0; }
+        }
+    </style>
 </head>
-<body class="h-full flex flex-col font-sans antialiased selection:bg-brand-500 selection:text-slate-950 pb-20 md:pb-6">
+<body>
 
-  <!-- Main Sticky Header -->
-  <header class="sticky top-0 z-40 glass-panel border-b shadow-xl">
-    <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between gap-2">
-      <div class="flex items-center gap-2.5">
-        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-emerald-600 via-brand-500 to-teal-400 flex items-center justify-center text-slate-950 font-black text-lg shadow-md shadow-brand-500/20">
-          🇬🇭
+    <header>
+        <div class="logo-area">
+            <span class="gh-flag">🇬🇭</span>
+            <div>
+                <h1>Tax & Accounting Hub LIVE</h1>
+                <p style="color: var(--text-muted); font-size: 0.85rem;">GRA Rules • Act 1178 Compliance Panel</p>
+            </div>
         </div>
+        <div class="controls">
+            <button class="btn-tool" onclick="toggleTheme()"><i class="fas fa-moon"></i> Toggle Theme</button>
+            <button class="btn-tool" onclick="window.print()"><i class="fas fa-file-pdf"></i> Export PDF</button>
+        </div>
+    </header>
+
+    <div class="alert-banner" id="alertEngine">
+        <i class="fas fa-bell-on" style="color: var(--accent-gold); font-size: 1.5rem;"></i>
         <div>
-          <h1 class="font-extrabold text-sm md:text-base leading-tight flex items-center gap-1.5">
-            Tax & Accounting Hub
-            <span class="inline-flex items-center px-1.5 py-0.5 rounded-full text-[9px] font-black bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
-              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping mr-1"></span> LIVE
-            </span>
-          </h1>
-          <p class="text-[11px] opacity-75">GRA Rules • PAYE • IFRS • BoG FX</p>
+            <strong>Custom Alert Keyword Engine Active:</strong> High-priority compliance and tax framework algorithms loaded locally.
         </div>
-      </div>
-
-      <!-- Action Controls -->
-      <div class="flex items-center gap-1.5 no-print">
-        <button onclick="openAlertModal()" class="p-2 rounded-xl bg-slate-800/60 dark:bg-slate-800 text-amber-400 border border-slate-700/50 hover:bg-slate-700 text-xs font-semibold flex items-center gap-1">
-          <i class="fa-solid fa-bell"></i>
-          <span class="hidden sm:inline">Alert Keywords</span>
-        </button>
-
-        <button onclick="toggleTheme()" id="themeBtn" class="p-2 rounded-xl bg-slate-800/60 dark:bg-slate-800 text-sky-400 border border-slate-700/50 hover:bg-slate-700 text-xs font-semibold flex items-center gap-1">
-          <i id="themeIcon" class="fa-solid fa-moon"></i>
-          <span class="hidden sm:inline" id="themeText">Dark</span>
-        </button>
-
-        <button onclick="printPage()" class="p-2 rounded-xl bg-slate-800/60 dark:bg-slate-800 text-emerald-400 border border-slate-700/50 hover:bg-slate-700 text-xs font-semibold" title="Print / Save PDF">
-          <i class="fa-solid fa-file-pdf"></i>
-        </button>
-      </div>
     </div>
 
-    <!-- Scrollable Navigation Bar -->
-    <div class="max-w-5xl mx-auto px-4 flex items-center gap-1.5 overflow-x-auto hide-scrollbar py-2 border-t border-slate-800/40 text-xs font-bold no-print">
-      <button onclick="switchTab('feed')" id="tab-feed" class="nav-tab px-3 py-1.5 rounded-xl whitespace-nowrap transition-all bg-brand-600 text-slate-950 shadow">
-        <i class="fa-solid fa-newspaper mr-1"></i> Live News
-      </button>
-      <button onclick="switchTab('calculator')" id="tab-calculator" class="nav-tab px-3 py-1.5 rounded-xl whitespace-nowrap transition-all bg-slate-800/50 text-slate-400 hover:text-white">
-        <i class="fa-solid fa-calculator mr-1 text-sky-400"></i> PAYE Calc
-      </button>
-      <button onclick="switchTab('calendar')" id="tab-calendar" class="nav-tab px-3 py-1.5 rounded-xl whitespace-nowrap transition-all bg-slate-800/50 text-slate-400 hover:text-white">
-        <i class="fa-solid fa-calendar-check mr-1 text-amber-400"></i> GRA Calendar
-      </button>
-      <button onclick="switchTab('rates')" id="tab-rates" class="nav-tab px-3 py-1.5 rounded-xl whitespace-nowrap transition-all bg-slate-800/50 text-slate-400 hover:text-white">
-        <i class="fa-solid fa-table-list mr-1 text-emerald-400"></i> GRA Rates
-      </button>
-      <button onclick="switchTab('fx')" id="tab-fx" class="nav-tab px-3 py-1.5 rounded-xl whitespace-nowrap transition-all bg-slate-800/50 text-slate-400 hover:text-white">
-        <i class="fa-solid fa-coins mr-1 text-yellow-400"></i> BoG FX & IAS 21
-      </button>
-      <button onclick="switchTab('vault')" id="tab-vault" class="nav-tab px-3 py-1.5 rounded-xl whitespace-nowrap transition-all bg-slate-800/50 text-slate-400 hover:text-white">
-        <i class="fa-solid fa-vault mr-1 text-rose-400"></i> Vault (<span id="vaultBadge">0</span>)
-      </button>
-    </div>
-  </header>
-
-  <!-- Main Content Container -->
-  <main class="flex-1 max-w-5xl w-full mx-auto p-4 space-y-4">
-    
-    <!-- Keyword Alert Banner -->
-    <div id="alertBanner" class="hidden rounded-2xl p-3.5 bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs flex items-center justify-between gap-2 shadow-lg">
-      <div class="flex items-center gap-2">
-        <i class="fa-solid fa-triangle-exclamation text-amber-400 text-base"></i>
-        <span><strong>Custom Alert Keyword Matched!</strong> <span id="alertBannerText">High-priority GRA/IFRS update detected.</span></span>
-      </div>
-      <button onclick="dismissAlertBanner()" class="text-amber-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
-    </div>
-
-    <!-- SECTION 1: LIVE NEWS FEED -->
-    <section id="sec-feed" class="space-y-4">
-      <div class="glass-panel p-3 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-3 no-print">
-        <div class="relative w-full sm:w-72">
-          <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
-          <input type="text" id="searchInput" oninput="renderArticles()" placeholder="Filter GRA, VAT, E-Levy, IFRS 18..." 
-                 class="w-full pl-9 pr-3 py-1.5 text-xs rounded-xl bg-slate-900/60 border border-slate-700/60 focus:outline-none focus:border-brand-500">
-        </div>
-        <div class="flex items-center gap-1.5 w-full sm:w-auto overflow-x-auto hide-scrollbar">
-          <button onclick="setCatFilter('all')" id="cat-all" class="cat-btn px-2.5 py-1 rounded-lg text-[11px] font-bold bg-brand-500 text-slate-950">All</button>
-          <button onclick="setCatFilter('ghana')" id="cat-ghana" class="cat-btn px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-slate-800/80 text-slate-400">🇬🇭 Ghana Tax</button>
-          <button onclick="setCatFilter('standards')" id="cat-standards" class="cat-btn px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-slate-800/80 text-slate-400">📘 IFRS</button>
-          <button onclick="setCatFilter('global')" id="cat-global" class="cat-btn px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-slate-800/80 text-slate-400">🌐 Global Tax</button>
-        </div>
-      </div>
-
-      <div id="loader" class="glass-panel p-8 rounded-2xl text-center space-y-3">
-        <i class="fa-solid fa-circle-notch fa-spin text-brand-500 text-2xl"></i>
-        <p class="text-xs text-slate-400">Aggregating live RSS feeds from GRA, Citi Business & IFRS Foundation...</p>
-      </div>
-
-      <div id="articlesList" class="space-y-3.5 hidden"></div>
-    </section>
-
-    <!-- SECTION 2: INTERACTIVE PAYE & NET SALARY CALCULATOR -->
-    <section id="sec-calculator" class="space-y-4 hidden">
-      <div class="glass-panel p-5 rounded-2xl border-l-4 border-l-sky-500 space-y-4">
-        <div>
-          <h2 class="text-base font-bold flex items-center gap-2">
-            <i class="fa-solid fa-calculator text-sky-400"></i> Ghana PAYE & Net Take-Home Calculator (Act 1178)
-          </h2>
-          <p class="text-xs opacity-75">Computes SSNIT Tier 1 & Tier 2 contributions, Tier 3 tax relief, and progressive GRA PAYE monthly tax bands.</p>
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
-          <div>
-            <label class="block font-semibold mb-1 opacity-80">Monthly Basic Salary (GH₵)</label>
-            <input type="number" id="calcBasic" value="5000" oninput="runPayeCalc()" class="w-full px-3 py-2 rounded-xl bg-slate-900/80 border border-slate-700 font-bold text-sm focus:outline-none focus:border-sky-500">
-          </div>
-          <div>
-            <label class="block font-semibold mb-1 opacity-80">Taxable Allowances (GH₵)</label>
-            <input type="number" id="calcAllowance" value="1000" oninput="runPayeCalc()" class="w-full px-3 py-2 rounded-xl bg-slate-900/80 border border-slate-700 font-bold text-sm focus:outline-none focus:border-sky-500">
-          </div>
-          <div>
-            <label class="block font-semibold mb-1 opacity-80">Tier 3 Provident Fund (%)</label>
-            <input type="number" id="calcTier3" value="5" oninput="runPayeCalc()" class="w-full px-3 py-2 rounded-xl bg-slate-900/80 border border-slate-700 font-bold text-sm focus:outline-none focus:border-sky-500">
-          </div>
-        </div>
-
-        <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-2 text-xs">
-          <div class="flex justify-between"><span class="opacity-70">Gross Monthly Earnings:</span><strong id="outGross" class="font-mono">GH₵ 0.00</strong></div>
-          <div class="flex justify-between"><span class="opacity-70">Employee SSNIT Contribution (5.5%):</span><strong id="outSSNIT" class="font-mono text-amber-400">GH₵ 0.00</strong></div>
-          <div class="flex justify-between"><span class="opacity-70">Tier 3 Voluntary Relief Deducted:</span><strong id="outTier3" class="font-mono text-emerald-400">GH₵ 0.00</strong></div>
-          <div class="flex justify-between"><span class="opacity-70">Taxable Chargeable Income:</span><strong id="outTaxable" class="font-mono">GH₵ 0.00</strong></div>
-          <div class="flex justify-between"><span class="opacity-70">GRA PAYE Tax Payable:</span><strong id="outPAYE" class="font-mono text-rose-400">GH₵ 0.00</strong></div>
-          <div class="flex justify-between border-t border-slate-800 pt-2"><span class="opacity-70">Employer SSNIT Contribution (13%):</span><strong id="outEmployerSSNIT" class="font-mono text-slate-400">GH₵ 0.00</strong></div>
-          <div class="flex justify-between border-t border-slate-700 pt-2 text-sm font-black text-emerald-400">
-            <span>Estimated Net Take-Home Pay:</span>
-            <span id="outNet" class="text-base font-mono">GH₵ 0.00</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- SECTION 3: GRA COMPLIANCE CALENDAR -->
-    <section id="sec-calendar" class="space-y-4 hidden">
-      <div class="glass-panel p-5 rounded-2xl border-l-4 border-l-amber-500 space-y-4">
-        <div>
-          <h2 class="text-base font-bold flex items-center gap-2">
-            <i class="fa-solid fa-calendar-check text-amber-400"></i> Statutory Tax Returns & Compliance Countdown
-          </h2>
-          <p class="text-xs opacity-75">Ghana Revenue Authority (GRA) & SSNIT monthly and quarterly filing deadlines.</p>
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          <div class="p-3.5 rounded-xl bg-slate-900/80 border border-slate-800 space-y-1">
-            <div class="text-[10px] font-extrabold uppercase text-amber-400">Monthly Remittance</div>
-            <div class="text-xs font-bold">PAYE Tax Return (GRA)</div>
-            <div class="text-lg font-black font-mono text-amber-400" id="cd-paye">-- Days</div>
-            <p class="text-[11px] opacity-70">Due by 15th of every month</p>
-          </div>
-
-          <div class="p-3.5 rounded-xl bg-slate-900/80 border border-slate-800 space-y-1">
-            <div class="text-[10px] font-extrabold uppercase text-sky-400">Social Security</div>
-            <div class="text-xs font-bold">SSNIT Tier 1 & 2 Payment</div>
-            <div class="text-lg font-black font-mono text-sky-400" id="cd-ssnit">-- Days</div>
-            <p class="text-[11px] opacity-70">Due by 14th of every month</p>
-          </div>
-
-          <div class="p-3.5 rounded-xl bg-slate-900/80 border border-slate-800 space-y-1">
-            <div class="text-[10px] font-extrabold uppercase text-emerald-400">VAT & Levies</div>
-            <div class="text-xs font-bold">VAT / NHIL / GETFund / COVID</div>
-            <div class="text-lg font-black font-mono text-emerald-400" id="cd-vat">-- Days</div>
-            <p class="text-[11px] opacity-70">Due by last day of month</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- SECTION 4: GRA RATES CHEAT SHEET -->
-    <section id="sec-rates" class="space-y-4 hidden">
-      <div class="glass-panel p-5 rounded-2xl border-l-4 border-l-emerald-500 space-y-4">
-        <h2 class="text-base font-bold flex items-center gap-2">
-          <i class="fa-solid fa-table-list text-emerald-400"></i> Official GRA Income Tax Bands (Act 1178)
-        </h2>
+    <div class="grid-container">
         
-        <div class="overflow-x-auto">
-          <table class="w-full text-left text-xs">
-            <thead class="bg-slate-900/80 border-b border-slate-800 text-slate-400">
-              <tr><th class="p-2">Monthly Band (GHS)</th><th class="p-2">Tax Rate</th><th class="p-2">Tax Payable (GHS)</th></tr>
-            </thead>
-            <tbody class="divide-y divide-slate-800/60 opacity-90">
-              <tr><td class="p-2">First GH₵ 490</td><td class="p-2 font-bold text-emerald-400">0%</td><td class="p-2">GH₵ 0.00</td></tr>
-              <tr><td class="p-2">Next GH₵ 110</td><td class="p-2 font-bold text-amber-400">5%</td><td class="p-2">GH₵ 5.50</td></tr>
-              <tr><td class="p-2">Next GH₵ 130</td><td class="p-2 font-bold text-amber-400">10%</td><td class="p-2">GH₵ 13.00</td></tr>
-              <tr><td class="p-2">Next GH₵ 3,166.67</td><td class="p-2 font-bold text-amber-400">17.5%</td><td class="p-2">GH₵ 554.17</td></tr>
-              <tr><td class="p-2">Next GH₵ 16,000.00</td><td class="p-2 font-bold text-amber-400">25%</td><td class="p-2">GH₵ 4,000.00</td></tr>
-              <tr><td class="p-2">Next GH₵ 30,500.00</td><td class="p-2 font-bold text-amber-400">30%</td><td class="p-2">GH₵ 9,150.00</td></tr>
-              <tr><td class="p-2">Exceeding GH₵ 50,396.67</td><td class="p-2 font-bold text-rose-400">35%</td><td class="p-2">35% on Excess</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </section>
-
-    <!-- SECTION 5: BOG FX RATES & IAS 21 REVALUATION -->
-    <section id="sec-fx" class="space-y-4 hidden">
-      <div class="glass-panel p-5 rounded-2xl border-l-4 border-l-yellow-400 space-y-4">
-        <div>
-          <h2 class="text-base font-bold flex items-center gap-2">
-            <i class="fa-solid fa-coins text-yellow-400"></i> BoG FX Reference & IAS 21 Foreign Revaluation Tool
-          </h2>
-          <p class="text-xs opacity-75">Estimate unrealized foreign exchange gains/losses for tax return filing.</p>
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
-          <div>
-            <label class="block font-semibold mb-1 opacity-80">Foreign Amount ($/€/£)</label>
-            <input type="number" id="fxAmount" value="10000" oninput="runFxCalc()" class="w-full px-3 py-2 rounded-xl bg-slate-900/80 border border-slate-700 font-bold text-sm focus:outline-none focus:border-yellow-400">
-          </div>
-          <div>
-            <label class="block font-semibold mb-1 opacity-80">Txn Booking Rate (GHS/$)</label>
-            <input type="number" id="fxBookRate" value="15.20" oninput="runFxCalc()" class="w-full px-3 py-2 rounded-xl bg-slate-900/80 border border-slate-700 font-bold text-sm focus:outline-none focus:border-yellow-400">
-          </div>
-          <div>
-            <label class="block font-semibold mb-1 opacity-80">Closing Spot Rate (GHS/$)</label>
-            <input type="number" id="fxSpotRate" value="15.75" oninput="runFxCalc()" class="w-full px-3 py-2 rounded-xl bg-slate-900/80 border border-slate-700 font-bold text-sm focus:outline-none focus:border-yellow-400">
-          </div>
-        </div>
-
-        <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-2 text-xs">
-          <div class="flex justify-between"><span class="opacity-70">Booked Functional Value:</span><strong id="outFxBook" class="font-mono">GH₵ 0.00</strong></div>
-          <div class="flex justify-between"><span class="opacity-70">Period-End Revalued Value:</span><strong id="outFxSpot" class="font-mono">GH₵ 0.00</strong></div>
-          <div class="flex justify-between border-t border-slate-800 pt-2 text-sm font-bold">
-            <span>IAS 21 Gain / (Loss):</span>
-            <span id="outFxDiff" class="font-mono text-emerald-400">GH₵ 0.00</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- SECTION 6: PERMANENT SAVED VAULT -->
-    <section id="sec-vault" class="space-y-4 hidden">
-      <div class="flex items-center justify-between">
-        <h2 class="text-sm font-bold flex items-center gap-2">
-          <i class="fa-solid fa-vault text-rose-400"></i> Saved Articles & Offline Vault
-        </h2>
-        <button onclick="clearVault()" class="text-xs text-rose-400 hover:underline">Clear Saved</button>
-      </div>
-      <div id="vaultList" class="space-y-3"></div>
-    </section>
-
-  </main>
-
-  <!-- Alert Keywords Config Modal -->
-  <div id="alertModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden no-print">
-    <div class="glass-panel p-5 rounded-2xl max-w-sm w-full space-y-4 border border-slate-700">
-      <div class="flex justify-between items-center">
-        <h3 class="font-bold text-sm">Configure Alert Keywords</h3>
-        <button onclick="closeAlertModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
-      </div>
-      <p class="text-xs opacity-75">Articles containing these comma-separated keywords will highlight in gold and trigger alert banners.</p>
-      <input type="text" id="alertKeywordsInput" class="w-full px-3 py-2 text-xs rounded-xl bg-slate-900 border border-slate-700 focus:outline-none focus:border-amber-400" placeholder="WHT, E-Levy, PAYE, IFRS 18...">
-      <button onclick="saveAlertKeywords()" class="w-full py-2 bg-amber-500 text-slate-950 font-bold text-xs rounded-xl">Save Alert Keywords</button>
-    </div>
-  </div>
-
-  <!-- Mobile Bottom Floating Navigation -->
-  <nav class="fixed bottom-0 left-0 right-0 glass-panel border-t flex justify-around py-2 px-2 z-40 md:hidden no-print text-[10px] font-bold">
-    <button onclick="switchTab('feed')" class="flex flex-col items-center gap-1 text-slate-400 hover:text-white">
-      <i class="fa-solid fa-newspaper text-sm"></i> News
-    </button>
-    <button onclick="switchTab('calculator')" class="flex flex-col items-center gap-1 text-slate-400 hover:text-white">
-      <i class="fa-solid fa-calculator text-sm"></i> PAYE
-    </button>
-    <button onclick="switchTab('calendar')" class="flex flex-col items-center gap-1 text-slate-400 hover:text-white">
-      <i class="fa-solid fa-calendar-check text-sm"></i> Deadlines
-    </button>
-    <button onclick="switchTab('vault')" class="flex flex-col items-center gap-1 text-slate-400 hover:text-white">
-      <i class="fa-solid fa-vault text-sm"></i> Vault
-    </button>
-  </nav>
-
-  <!-- JavaScript Engine -->
-  <script>
-    const RSS_SOURCES = [
-      { category: 'ghana', label: 'Ghana Tax', url: 'https://news.google.com/rss/search?q=Ghana+Revenue+Authority+OR+Ghana+Tax+Act+OR+GRA+VAT&hl=en-GH&gl=GH&ceid=GH:en' },
-      { category: 'standards', label: 'IFRS Standards', url: 'https://news.google.com/rss/search?q=IFRS+accounting+standards+OR+IASB+reporting&hl=en-US&gl=US&ceid=US:en' },
-      { category: 'global', label: 'Global Tax', url: 'https://news.google.com/rss/search?q=OECD+global+tax+OR+international+tax&hl=en-US&gl=US&ceid=US:en' }
-    ];
-
-    let allArticles = [];
-    let currentCat = 'all';
-    let alertKeywords = (localStorage.getItem('tax_alert_keywords') || 'WHT, PAYE, E-Levy, Transfer Pricing, IFRS 18, Gazette').split(',').map(s=>s.trim());
-    let vaultArticles = JSON.parse(localStorage.getItem('tax_saved_vault') || '[]');
-
-    window.onload = function() {
-      initTheme();
-      updateVaultCount();
-      fetchFeeds();
-      runPayeCalc();
-      runFxCalc();
-      updateCountdowns();
-    };
-
-    // Theme Manager
-    function initTheme() {
-      const savedTheme = localStorage.getItem('tax_theme') || 'dark';
-      document.documentElement.setAttribute('data-theme', savedTheme);
-      updateThemeUI(savedTheme);
-    }
-
-    function toggleTheme() {
-      const curr = document.documentElement.getAttribute('data-theme');
-      const next = curr === 'dark' ? 'light' : 'dark';
-      document.documentElement.setAttribute('data-theme', next);
-      localStorage.setItem('tax_theme', next);
-      updateThemeUI(next);
-    }
-
-    function updateThemeUI(theme) {
-      document.getElementById('themeIcon').className = theme === 'dark' ? 'fa-solid fa-sun text-yellow-400' : 'fa-solid fa-moon text-sky-400';
-      document.getElementById('themeText').innerText = theme === 'dark' ? 'Light' : 'Dark';
-    }
-
-    // Tab Switcher
-    function switchTab(tabId) {
-      ['feed', 'calculator', 'calendar', 'rates', 'fx', 'vault'].forEach(id => {
-        document.getElementById(`sec-${id}`).classList.add('hidden');
-        const btn = document.getElementById(`tab-${id}`);
-        if(btn) btn.className = 'nav-tab px-3 py-1.5 rounded-xl whitespace-nowrap transition-all bg-slate-800/50 text-slate-400 hover:text-white';
-      });
-
-      document.getElementById(`sec-${tabId}`).classList.remove('hidden');
-      const activeBtn = document.getElementById(`tab-${tabId}`);
-      if(activeBtn) activeBtn.className = 'nav-tab px-3 py-1.5 rounded-xl whitespace-nowrap transition-all bg-brand-600 text-slate-950 shadow';
-
-      if (tabId === 'vault') renderVault();
-    }
-
-    // RSS Feed Fetcher & Storage Persistence
-    async function fetchFeeds() {
-      showLoader(true);
-      let fetched = [];
-
-      for (const src of RSS_SOURCES) {
-        try {
-          const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(src.url)}`);
-          const data = await res.json();
-          if (data.status === 'ok' && data.items) {
-            const parsed = data.items.map(item => ({
-              id: item.guid || item.link,
-              title: item.title,
-              description: cleanText(item.description || item.content),
-              link: item.link,
-              pubDate: new Date(item.pubDate || Date.now()),
-              category: src.category,
-              label: src.label
-            }));
-            fetched.push(...parsed);
-          }
-        } catch(e) {}
-      }
-
-      // Combine fetched with local storage vault so articles never disappear
-      const combined = [...fetched, ...vaultArticles];
-      const unique = new Map();
-      combined.forEach(a => unique.set(a.id, a));
-      allArticles = Array.from(unique.values()).sort((a,b) => new Date(b.pubDate) - new Date(a.pubDate));
-
-      showLoader(false);
-      checkAlertKeywords(allArticles);
-      renderArticles();
-    }
-
-    function renderArticles() {
-      const container = document.getElementById('articlesList');
-      const query = document.getElementById('searchInput').value.toLowerCase();
-      container.innerHTML = '';
-
-      let list = currentCat === 'all' ? allArticles : allArticles.filter(a => a.category === currentCat);
-      if (query) list = list.filter(a => a.title.toLowerCase().includes(query) || a.description.toLowerCase().includes(query));
-
-      if (!list.length) {
-        container.innerHTML = `<div class="text-center py-8 text-xs text-slate-400">No matching updates found.</div>`;
-        container.classList.remove('hidden');
-        return;
-      }
-
-      list.slice(0, 45).forEach(item => {
-        const isVault = vaultArticles.some(v => v.id === item.id);
-        const isMatchedAlert = alertKeywords.some(kw => kw && item.title.toLowerCase().includes(kw.toLowerCase()));
-        
-        container.insertAdjacentHTML('beforeend', `
-          <div class="glass-panel p-4 rounded-2xl space-y-2 border-l-4 ${isMatchedAlert ? 'border-l-amber-400 bg-amber-500/5' : getBorderColor(item.category)}">
-            <div class="flex items-center justify-between text-[11px]">
-              <span class="font-extrabold uppercase px-2 py-0.5 rounded ${isMatchedAlert ? 'bg-amber-400 text-slate-950' : 'bg-slate-800 text-slate-300'}">${item.label}</span>
-              <span class="opacity-60">${new Date(item.pubDate).toLocaleDateString()}</span>
+        <!-- FEATURE 1: COMPREHENSIVE PAYE CALCULATOR -->
+        <div class="card">
+            <h2><i class="fas fa-calculator"></i> PAYE & Net Take-Home (Act 1178)</h2>
+            <div class="form-group">
+                <label>Monthly Basic Salary (GH₵)</label>
+                <input type="number" id="payeBasic" value="5000" oninput="calculatePAYE()">
             </div>
-            <h3 class="font-bold text-sm leading-tight">${item.title}</h3>
-            <p class="text-xs opacity-80 line-clamp-2">${item.description}</p>
-            
-            <!-- Smart Summary Expandable Drawer -->
-            <details class="text-xs pt-1 border-t border-slate-800/60">
-              <summary class="cursor-pointer font-bold text-brand-400 hover:underline">Summary & Key Insights</summary>
-              <div class="mt-2 p-2.5 rounded-xl bg-slate-900/80 space-y-1 text-[11px]">
-                <div><strong>Target Impact:</strong> ${extractImpactGroup(item.title)}</div>
-                <div><strong>Recommended Action:</strong> Review policy adjustments and update tax computation ledger.</div>
-              </div>
-            </details>
-
-            <div class="flex items-center justify-between pt-2 border-t border-slate-800 text-xs">
-              <button onclick="toggleVault('${encodeURIComponent(JSON.stringify(item))}')" class="p-1.5 rounded-lg bg-slate-800 text-slate-300">
-                <i class="${isVault ? 'fa-solid text-rose-500' : 'fa-regular'} fa-bookmark"></i>
-              </button>
-              <a href="${item.link}" target="_blank" class="px-2.5 py-1 rounded-lg bg-brand-500/20 text-brand-400 font-bold text-[11px]">Read Coverage &rarr;</a>
+            <div class="form-group">
+                <label>Taxable Allowances (GH₵)</label>
+                <input type="number" id="payeAllowance" value="1000" oninput="calculatePAYE()">
             </div>
-          </div>
-        `);
-      });
-
-      container.classList.remove('hidden');
-    }
-
-    // PAYE Calculator Logic
-    function runPayeCalc() {
-      const basic = parseFloat(document.getElementById('calcBasic').value) || 0;
-      const allowance = parseFloat(document.getElementById('calcAllowance').value) || 0;
-      const tier3Pct = parseFloat(document.getElementById('calcTier3').value) || 0;
-
-      const gross = basic + allowance;
-      const ssnitEmployee = basic * 0.055;
-      const ssnitEmployer = basic * 0.13;
-      const tier3Relief = basic * (tier3Pct / 100);
-
-      const taxableIncome = Math.max(0, gross - ssnitEmployee - tier3Relief);
-
-      let tax = 0;
-      let rem = taxableIncome;
-
-      const bands = [
-        { limit: 490, rate: 0.00 },
-        { limit: 110, rate: 0.05 },
-        { limit: 130, rate: 0.10 },
-        { limit: 3166.67, rate: 0.175 },
-        { limit: 16000.00, rate: 0.25 },
-        { limit: 30500.00, rate: 0.30 }
-      ];
-
-      for (const b of bands) {
-        if (rem <= 0) break;
-        const chunk = Math.min(rem, b.limit);
-        tax += chunk * b.rate;
-        rem -= chunk;
-      }
-      if (rem > 0) tax += rem * 0.35;
-
-      const net = gross - ssnitEmployee - tier3Relief - tax;
-
-      document.getElementById('outGross').innerText = `GH₵ ${gross.toFixed(2)}`;
-      document.getElementById('outSSNIT').innerText = `GH₵ ${ssnitEmployee.toFixed(2)}`;
-      document.getElementById('outTier3').innerText = `GH₵ ${tier3Relief.toFixed(2)}`;
-      document.getElementById('outTaxable').innerText = `GH₵ ${taxableIncome.toFixed(2)}`;
-      document.getElementById('outPAYE').innerText = `GH₵ ${tax.toFixed(2)}`;
-      document.getElementById('outEmployerSSNIT').innerText = `GH₵ ${ssnitEmployer.toFixed(2)}`;
-      document.getElementById('outNet').innerText = `GH₵ ${net.toFixed(2)}`;
-    }
-
-    // IAS 21 Foreign Exchange Calculator
-    function runFxCalc() {
-      const amt = parseFloat(document.getElementById('fxAmount').value) || 0;
-      const bookRate = parseFloat(document.getElementById('fxBookRate').value) || 0;
-      const spotRate = parseFloat(document.getElementById('fxSpotRate').value) || 0;
-
-      const bookVal = amt * bookRate;
-      const spotVal = amt * spotRate;
-      const diff = spotVal - bookVal;
-
-      document.getElementById('outFxBook').innerText = `GH₵ ${bookVal.toFixed(2)}`;
-      document.getElementById('outFxSpot').innerText = `GH₵ ${spotVal.toFixed(2)}`;
-      document.getElementById('outFxDiff').innerText = `GH₵ ${diff.toFixed(2)} (${diff >= 0 ? 'Unrealized Gain' : 'Unrealized Loss'})`;
-      document.getElementById('outFxDiff').className = `font-mono ${diff >= 0 ? 'text-emerald-400' : 'text-rose-400'}`;
-    }
-
-    // Countdown Timers
-    function updateCountdowns() {
-      const now = new Date();
-      const year = now.getFullYear();
-      const month = now.getMonth();
-
-      const payeDate = new Date(year, month, 15);
-      if (now > payeDate) payeDate.setMonth(month + 1);
-
-      const ssnitDate = new Date(year, month, 14);
-      if (now > ssnitDate) ssnitDate.setMonth(month + 1);
-
-      const vatDate = new Date(year, month + 1, 0);
-
-      document.getElementById('cd-paye').innerText = `${Math.ceil((payeDate - now) / (1000 * 60 * 60 * 24))} Days`;
-      document.getElementById('cd-ssnit').innerText = `${Math.ceil((ssnitDate - now) / (1000 * 60 * 60 * 24))} Days`;
-      document.getElementById('cd-vat').innerText = `${Math.ceil((vatDate - now) / (1000 * 60 * 60 * 24))} Days`;
-    }
-
-    // Keyword Alerts Engine
-    function checkAlertKeywords(articles) {
-      const matched = articles.find(a => alertKeywords.some(kw => kw && a.title.toLowerCase().includes(kw.toLowerCase())));
-      if (matched) {
-        document.getElementById('alertBannerText').innerText = matched.title;
-        document.getElementById('alertBanner').classList.remove('hidden');
-      }
-    }
-
-    function dismissAlertBanner() {
-      document.getElementById('alertBanner').classList.add('hidden');
-    }
-
-    function openAlertModal() {
-      document.getElementById('alertKeywordsInput').value = alertKeywords.join(', ');
-      document.getElementById('alertModal').classList.remove('hidden');
-    }
-
-    function closeAlertModal() {
-      document.getElementById('alertModal').classList.add('hidden');
-    }
-
-    function saveAlertKeywords() {
-      const raw = document.getElementById('alertKeywordsInput').value;
-      alertKeywords = raw.split(',').map(s=>s.trim());
-      localStorage.setItem('tax_alert_keywords', raw);
-      closeAlertModal();
-      renderArticles();
-    }
-
-    // Vault Bookmarking Logic
-    function toggleVault(encoded) {
-      const item = JSON.parse(decodeURIComponent(encoded));
-      const idx = vaultArticles.findIndex(v => v.id === item.id);
-      if (idx > -1) vaultArticles.splice(idx, 1);
-      else vaultArticles.push(item);
-      localStorage.setItem('tax_saved_vault', JSON.stringify(vaultArticles));
-      updateVaultCount();
-      renderArticles();
-    }
-
-    function renderVault() {
-      const container = document.getElementById('vaultList');
-      container.innerHTML = '';
-      if (!vaultArticles.length) {
-        container.innerHTML = `<div class="text-center py-8 text-xs text-slate-400">Vault is empty. Bookmark items to store them permanently.</div>`;
-        return;
-      }
-      vaultArticles.forEach(item => {
-        container.insertAdjacentHTML('beforeend', `
-          <div class="glass-panel p-4 rounded-2xl space-y-2 border-l-4 border-l-rose-500">
-            <h3 class="font-bold text-sm">${item.title}</h3>
-            <p class="text-xs opacity-75 line-clamp-2">${item.description}</p>
-            <div class="flex items-center justify-between pt-2 border-t border-slate-800 text-xs">
-              <a href="${item.link}" target="_blank" class="text-brand-400 font-bold">Open Article &rarr;</a>
-              <button onclick="toggleVault('${encodeURIComponent(JSON.stringify(item))}')" class="text-rose-400">Remove</button>
+            <div class="form-group">
+                <label>Tier 3 Provident Fund Employee Contribution (%)</label>
+                <input type="number" id="payeTier3" value="5" min="0" max="16.5" oninput="calculatePAYE()">
             </div>
-          </div>
-        `);
-      });
-    }
+            <div class="results-box">
+                <div class="results-line"><span>Gross Monthly Earnings:</span><span id="resGross">GH₵ 0.00</span></div>
+                <div class="results-line"><span>Employee SSNIT (5.5%):</span><span id="resSSNIT">GH₵ 0.00</span></div>
+                <div class="results-line"><span>Tier 3 Tax Relief Availed:</span><span id="resTier3Relief">GH₵ 0.00</span></div>
+                <div class="results-line"><span>Chargeable Income:</span><span id="resChargeable">GH₵ 0.00</span></div>
+                <div class="results-line"><span>GRA PAYE Tax Taxable:</span><span id="resPAYE" style="color: var(--accent-red);">GH₵ 0.00</span></div>
+                <div class="results-line"><span>Employer SSNIT (13%):</span><span id="resEmployerSSNIT">GH₵ 0.00</span></div>
+                <div class="results-line"><span>Estimated Net Take-Home Pay:</span><span id="resNet" class="highlight-val">GH₵ 0.00</span></div>
+            </div>
+            <div class="advisor-box" id="payeAdvisor">
+                💡 Loading optimization insights...
+            </div>
+        </div>
 
-    function clearVault() {
-      vaultArticles = [];
-      localStorage.setItem('tax_saved_vault', '[]');
-      updateVaultCount();
-      renderVault();
-    }
-
-    function updateVaultCount() {
-      document.getElementById('vaultBadge').innerText = vaultArticles.length;
-    }
-
-    function setCatFilter(cat) {
-      currentCat = cat;
-      document.querySelectorAll('.cat-btn').forEach(b => b.className = 'cat-btn px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-slate-800/80 text-slate-400');
-      document.getElementById(`cat-${cat}`).className = 'cat-btn px-2.5 py-1 rounded-lg text-[11px] font-bold bg-brand-500 text-slate-950';
-      renderArticles();
-    }
-
-    function extractImpactGroup(title) {
-      const t = title.toLowerCase();
-      if (t.includes('vat') || t.includes('sme')) return 'SMEs & Commercial Retailers';
-      if (t.includes('paye') || t.includes('salary')) return 'Salaried Employees & Payroll Managers';
-      if (t.includes('corporate') || t.includes('ifrs')) return 'Multi-Nationals & Audit Firms';
-      return 'General Taxpayers & Financial Consultants';
-    }
-
-    function getBorderColor(cat) {
-      if (cat === 'ghana') return 'border-l-amber-500';
-      if (cat === 'standards') return 'border-l-purple-500';
-      return 'border-l-sky-500';
-    }
-
-    function cleanText(html) {
-      const d = document.createElement('div');
-      d.innerHTML = html || '';
-      return d.textContent || d.innerText || '';
-    }
-
-    function printPage() { window.print(); }
-    function showLoader(s) { document.getElementById('loader').classList.toggle('hidden', !s); }
-  </script>
-</body>
-</html>
-```
-
-### Summary of Additions
-* **Feature 1:** PAYE Calculator (calculates SSNIT 5.5% & 13%, Tier 3 reliefs, progressive Act 1178 bands, and net salary).
-* **Feature 2:** GRA Filing Countdown Cards for 14th/15th and month-end return deadlines.
-* **Feature 3:** Smart Expandable Insights Drawer under each article card detailing Target Impact Groups.
-* **Feature 4:** Custom Alert Keyword Editor & Gold Highlight engine.
-* **Feature 5:** BoG & IAS 21 Foreign Currency Revaluation gain/loss estimator.
-* **Feature 6:** CSS `@media print` rules for clean PDF exports via the top PDF icon.
-* **Feature 7:** Persistence Engine saving all bookmarked articles locally so feeds never expire.
+        <!-- NEW UNIQUE FEATURE: VAT & INDIRECT LEVY SPLITTER -->
+        <div class="card">
+            <h2><i class="fas fa-receipt"></i> VAT & Levies Component Splitter</h2>
